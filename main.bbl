@@ -1,0 +1,443 @@
+\begin{thebibliography}{10}
+
+\bibitem{rombach2022high}
+Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj{\"o}rn Ommer.
+\newblock High-resolution image synthesis with latent diffusion models.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}, pages 10684--10695, 2022.
+
+\bibitem{ho2020denoising}
+Jonathan Ho, Ajay Jain, and Pieter Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock {\em Advances in neural information processing systems}, 33:6840--6851, 2020.
+
+\bibitem{takagi2023high}
+Yu~Takagi and Shinji Nishimoto.
+\newblock High-resolution image reconstruction with latent diffusion models from human brain activity.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 14453--14463, 2023.
+
+\bibitem{chen2023seeing}
+Zijiao Chen, Jiaxin Qing, Tiange Xiang, Wan~Lin Yue, and Juan~Helen Zhou.
+\newblock Seeing beyond the brain: Conditional diffusion model with sparse masked modeling for vision decoding.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 22710--22720, 2023.
+
+\bibitem{scotti2023reconstructing}
+Paul~S Scotti, Atmadeep Banerjee, Jimmie Goode, Stepan Shabalin, Alex Nguyen, Ethan Cohen, Aidan~J Dempster, Nathalie Verlinde, Elad Yundler, David Weisberg, et~al.
+\newblock Reconstructing the mind's eye: fmri-to-image with contrastive learning and diffusion priors.
+\newblock {\em arXiv preprint arXiv:2305.18274}, 2023.
+
+\bibitem{lu2023minddiffuser}
+Yizhuo Lu, Changde Du, Dianpeng Wang, and Huiguang He.
+\newblock Minddiffuser: Controlled image reconstruction from human brain activity with semantic and structural diffusion.
+\newblock {\em arXiv preprint arXiv:2303.14139}, 2023.
+
+\bibitem{sun2024contrast}
+Jingyuan Sun, Mingxiao Li, Zijiao Chen, Yunhao Zhang, Shaonan Wang, and Marie-Francine Moens.
+\newblock Contrast, attend and diffuse to decode high-resolution images from brain activities.
+\newblock {\em Advances in Neural Information Processing Systems}, 36, 2024.
+
+\bibitem{shen2024neuro}
+Guobin Shen, Dongcheng Zhao, Xiang He, Linghao Feng, Yiting Dong, Jihang Wang, Qian Zhang, and Yi~Zeng.
+\newblock Neuro-vision to language: Image reconstruction and interaction via non-invasive brain recordings.
+\newblock {\em arXiv preprint arXiv:2404.19438}, 2024.
+
+\bibitem{xia2024dream}
+Weihao Xia, Raoul de~Charette, Cengiz Oztireli, and Jing-Hao Xue.
+\newblock Dream: Visual decoding from reversing human visual system.
+\newblock In {\em Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision}, pages 8226--8235, 2024.
+
+\bibitem{ogawa1990oxygenation}
+Seiji Ogawa, Tso-Ming Lee, Asha~S Nayak, and Paul Glynn.
+\newblock Oxygenation-sensitive contrast in magnetic resonance image of rodent brain at high magnetic fields.
+\newblock {\em Magnetic resonance in medicine}, 14(1):68--78, 1990.
+
+\bibitem{bai2023dreamdiffusion}
+Yunpeng Bai, Xintao Wang, Yanpei Cao, Yixiao Ge, Chun Yuan, and Ying Shan.
+\newblock Dreamdiffusion: Generating high-quality images from brain eeg signals.
+\newblock {\em arXiv preprint arXiv:2306.16934}, 2023.
+
+\bibitem{lan2023seeing}
+Yu-Ting Lan, Kan Ren, Yansen Wang, Wei-Long Zheng, Dongsheng Li, Bao-Liang Lu, and Lili Qiu.
+\newblock Seeing through the brain: Image reconstruction of visual perception from human brain signals.
+\newblock {\em arXiv preprint arXiv:2308.02510}, 2023.
+
+\bibitem{zeng2023controllable}
+Bohan Zeng, Shanglin Li, Xuhui Liu, Sicheng Gao, Xiaolong Jiang, Xu~Tang, Yao Hu, Jianzhuang Liu, and Baochang Zhang.
+\newblock Controllable mind visual diffusion model.
+\newblock In {\em Proceedings of the AAAI Conference on Artificial Intelligence}, volume~38, pages 6935--6943, 2024.
+
+\bibitem{vanrullen2019reconstructing}
+Rufin VanRullen and Leila Reddy.
+\newblock Reconstructing faces from fmri patterns using deep generative neural networks.
+\newblock {\em Communications biology}, 2(1):193, 2019.
+
+\bibitem{dado2022hyperrealistic}
+Thirza Dado, Ya{\u{g}}mur G{\"u}{\c{c}}l{\"u}t{\"u}rk, Luca Ambrogioni, Gabri{\"e}lle Ras, Sander Bosch, Marcel van Gerven, and Umut G{\"u}{\c{c}}l{\"u}.
+\newblock Hyperrealistic neural decoding for reconstructing faces from fmri activations via the gan latent space.
+\newblock {\em Scientific reports}, 12(1):141, 2022.
+
+\bibitem{shen2019deep}
+Guohua Shen, Tomoyasu Horikawa, Kei Majima, and Yukiyasu Kamitani.
+\newblock Deep image reconstruction from human brain activity.
+\newblock {\em PLoS computational biology}, 15(1):e1006633, 2019.
+
+\bibitem{seeliger2018generative}
+Katja Seeliger, Umut G{\"u}{\c{c}}l{\"u}, Luca Ambrogioni, Yagmur G{\"u}{\c{c}}l{\"u}t{\"u}rk, and Marcel~AJ van Gerven.
+\newblock Generative adversarial networks for reconstructing natural images from brain activity.
+\newblock {\em NeuroImage}, 181:775--785, 2018.
+
+\bibitem{NEURIPS2022_bee5125b}
+Sikun Lin, Thomas Sprague, and Ambuj~K Singh.
+\newblock Mind reader: Reconstructing complex images from brain activities.
+\newblock In S.~Koyejo, S.~Mohamed, A.~Agarwal, D.~Belgrave, K.~Cho, and A.~Oh, editors, {\em Advances in Neural Information Processing Systems}, volume~35, pages 29624--29636. Curran Associates, Inc., 2022.
+
+\bibitem{gu2022decoding}
+Zijin Gu, Keith Jamison, Amy Kuceyeski, and Mert Sabuncu.
+\newblock Decoding natural image stimuli from fmri data with a surface-based convolutional network.
+\newblock {\em arXiv preprint arXiv:2212.02409}, 2022.
+
+\bibitem{liu2024mind}
+Qing Liu, Hongqing Zhu, Ning Chen, Bingcang Huang, Weiping Lu, and Ying Wang.
+\newblock Mind-bridge: reconstructing visual images based on diffusion model from human brain activity.
+\newblock {\em Signal, Image and Video Processing}, pages 1--11, 2024.
+
+\bibitem{defossez2023decoding}
+Alexandre D{\'e}fossez, Charlotte Caucheteux, J{\'e}r{\'e}my Rapin, Ori Kabeli, and Jean-R{\'e}mi King.
+\newblock Decoding speech perception from non-invasive brain recordings.
+\newblock {\em Nature Machine Intelligence}, 5(10):1097--1107, 2023.
+
+\bibitem{zhao2024mapguide}
+Xinpei Zhao, Jingyuan Sun, Shaonan Wang, Jing Ye, Xiaohan Zhang, and Chengqing Zong.
+\newblock Mapguide: A simple yet effective method to reconstruct continuous language from brain activities.
+\newblock {\em arXiv preprint arXiv:2403.17516}, 2024.
+
+\bibitem{zhang2023adding}
+Lvmin Zhang, Anyi Rao, and Maneesh Agrawala.
+\newblock Adding conditional control to text-to-image diffusion models.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on Computer Vision}, pages 3836--3847, 2023.
+
+\bibitem{zhang2023prospect}
+Yuxin Zhang, Weiming Dong, Fan Tang, Nisha Huang, Haibin Huang, Chongyang Ma, Tong-Yee Lee, Oliver Deussen, and Changsheng Xu.
+\newblock Prospect: Prompt spectrum for attribute-aware personalization of diffusion models.
+\newblock {\em ACM Transactions on Graphics (TOG)}, 42(6):244:1--244:14, 2023.
+
+\bibitem{Zhang_2023_inst}
+Yuxin Zhang, Nisha Huang, Fan Tang, Haibin Huang, Chongyang Ma, Weiming Dong, and Changsheng Xu.
+\newblock Inversion-based style transfer with diffusion models.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, pages 10146--10156, June 2023.
+
+\bibitem{wei2022emergent}
+Jason Wei, Yi~Tay, Rishi Bommasani, Colin Raffel, Barret Zoph, Sebastian Borgeaud, Dani Yogatama, Maarten Bosma, Denny Zhou, Donald Metzler, et~al.
+\newblock Emergent abilities of large language models.
+\newblock {\em arXiv preprint arXiv:2206.07682}, 2022.
+
+\bibitem{ferrante2022semantic}
+Matteo Ferrante, Tommaso Boccato, and Nicola Toschi.
+\newblock Semantic brain decoding: from fmri to conceptually similar image reconstruction of visual stimuli.
+\newblock {\em arXiv preprint arXiv:2212.06726}, 2022.
+
+\bibitem{goodfellow2020generative}
+Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio.
+\newblock Generative adversarial networks.
+\newblock {\em Communications of the ACM}, 63(11):139--144, 2020.
+
+\bibitem{li2024neuraldiffuser}
+Haoyu Li, Hao Wu, and Badong Chen.
+\newblock Neuraldiffuser: Controllable fmri reconstruction with primary visual feature guided diffusion.
+\newblock {\em arXiv preprint arXiv:2402.13809}, 2024.
+
+\bibitem{fang2024alleviating}
+Tao Fang, Qian Zheng, and Gang Pan.
+\newblock Alleviating the semantic gap for generalized fmri-to-image reconstruction.
+\newblock {\em Advances in Neural Information Processing Systems}, 36, 2024.
+
+\bibitem{li2024visual}
+Dongyang Li, Chen Wei, Shiying Li, Jiachen Zou, and Quanying Liu.
+\newblock Visual decoding and reconstruction via eeg embeddings with guided diffusion.
+\newblock {\em arXiv preprint arXiv:2403.07721}, 2024.
+
+\bibitem{liu2023brainclip}
+Yulong Liu, Yongqiang Ma, Wei Zhou, Guibo Zhu, and Nanning Zheng.
+\newblock Brainclip: Bridging brain and visual-linguistic representation via clip for generic natural visual stimulus decoding from fmri.
+\newblock {\em arXiv preprint arXiv:2302.12971}, 2023.
+
+\bibitem{he2022masked}
+Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll{\'a}r, and Ross Girshick.
+\newblock Masked autoencoders are scalable vision learners.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}, pages 16000--16009, 2022.
+
+\bibitem{sun2023tuning}
+Jingyuan Sun, Xiaohan Zhang, and Marie-Francine Moens.
+\newblock Tuning in to neural encoding: Linking human brain and artificial supervised representations of language.
+\newblock {\em arXiv preprint arXiv:2310.04460}, 2023.
+
+\bibitem{sun2024neurocine}
+Jingyuan Sun, Mingxiao Li, Zijiao Chen, and Marie-Francine Moens.
+\newblock Neurocine: Decoding vivid video sequences from human brain activties.
+\newblock {\em arXiv preprint arXiv:2402.01590}, 2024.
+
+\bibitem{wang2024mindbridge}
+Shizun Wang, Songhua Liu, Zhenxiong Tan, and Xinchao Wang.
+\newblock Mindbridge: A cross-subject brain decoding framework.
+\newblock {\em arXiv preprint arXiv:2404.07850}, 2024.
+
+\bibitem{nikolaus2024modality}
+Mitja Nikolaus, Milad Mozafari, Nicholas Asher, Leila Reddy, and Rufin VanRullen.
+\newblock Modality-agnostic fmri decoding of vision and language.
+\newblock {\em arXiv preprint arXiv:2403.11771}, 2024.
+
+\bibitem{xia2024umbrae}
+Weihao Xia, Raoul de~Charette, Cengiz {\"O}ztireli, and Jing-Hao Xue.
+\newblock Umbrae: Unified multimodal decoding of brain signals.
+\newblock {\em arXiv preprint arXiv:2404.07202}, 2024.
+
+\bibitem{chen2024bridging}
+Jiaxuan Chen, Yu~Qi, Yueming Wang, and Gang Pan.
+\newblock Bridging the semantic latent space between brain and machine: Similarity is all you need.
+\newblock In {\em Proceedings of the AAAI Conference on Artificial Intelligence}, volume~38, pages 11302--11310, 2024.
+
+\bibitem{huo2024neuropictor}
+Jingyang Huo, Yikai Wang, Xuelin Qian, Yun Wang, Chong Li, Jianfeng Feng, and Yanwei Fu.
+\newblock Neuropictor: Refining fmri-to-image reconstruction via multi-individual pretraining and multi-level modulation.
+\newblock {\em arXiv preprint arXiv:2403.18211}, 2024.
+
+\bibitem{chen2023cinematic}
+Zijiao Chen, Jiaxin Qing, and Juan~Helen Zhou.
+\newblock Cinematic mindscapes: High-quality video reconstruction from brain activity.
+\newblock In A.~Oh, T.~Naumann, A.~Globerson, K.~Saenko, M.~Hardt, and S.~Levine, editors, {\em Advances in Neural Information Processing Systems}, volume~36, pages 24841--24858. Curran Associates, Inc., 2023.
+
+\bibitem{mai2023unibrain}
+Weijian Mai and Zhijun Zhang.
+\newblock Unibrain: Unify image reconstruction and captioning all in one diffusion model from human brain activity.
+\newblock {\em arXiv preprint arXiv:2308.07428}, 2023.
+
+\bibitem{avrahami2023blended}
+Omri Avrahami, Ohad Fried, and Dani Lischinski.
+\newblock Blended latent diffusion.
+\newblock {\em ACM Transactions on Graphics (TOG)}, 42(4):1--11, 2023.
+
+\bibitem{couairon2022diffedit}
+Guillaume Couairon, Jakob Verbeek, Holger Schwenk, and Matthieu Cord.
+\newblock Diffedit: Diffusion-based semantic image editing with mask guidance.
+\newblock {\em arXiv preprint arXiv:2210.11427}, 2022.
+
+\bibitem{meng2021sdedit}
+Chenlin Meng, Yutong He, Yang Song, Jiaming Song, Jiajun Wu, Jun-Yan Zhu, and Stefano Ermon.
+\newblock Sdedit: Guided image synthesis and editing with stochastic differential equations.
+\newblock {\em arXiv preprint arXiv:2108.01073}, 2021.
+
+\bibitem{nichol2021glide}
+Alex Nichol, Prafulla Dhariwal, Aditya Ramesh, Pranav Shyam, Pamela Mishkin, Bob McGrew, Ilya Sutskever, and Mark Chen.
+\newblock Glide: Towards photorealistic image generation and editing with text-guided diffusion models.
+\newblock {\em arXiv preprint arXiv:2112.10741}, 2021.
+
+\bibitem{sun2023imagebrush}
+Yasheng Sun, Yifan Yang, Houwen Peng, Yifei Shen, Yuqing Yang, Han Hu, Lili Qiu, and Hideki Koike.
+\newblock Imagebrush: Learning visual in-context instructions for exemplar-based image manipulation.
+\newblock {\em arXiv preprint arXiv:2308.00906}, 2023.
+
+\bibitem{sun2024avi}
+Yasheng Sun, Wenqing Chu, Hang Zhou, Kaisiyuan Wang, and Hideki Koike.
+\newblock Avi-talking: Learning audio-visual instructions for expressive 3d talking face generation.
+\newblock {\em arXiv preprint arXiv:2402.16124}, 2024.
+
+\bibitem{hertz2022prompt}
+Amir Hertz, Ron Mokady, Jay Tenenbaum, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or.
+\newblock Prompt-to-prompt image editing with cross attention control.
+\newblock {\em arXiv preprint arXiv:2208.01626}, 2022.
+
+\bibitem{balaji2022ediffi}
+Yogesh Balaji, Seungjun Nah, Xun Huang, Arash Vahdat, Jiaming Song, Karsten Kreis, Miika Aittala, Timo Aila, Samuli Laine, Bryan Catanzaro, et~al.
+\newblock ediffi: Text-to-image diffusion models with an ensemble of expert denoisers.
+\newblock {\em arXiv preprint arXiv:2211.01324}, 2022.
+
+\bibitem{tumanyan2023plug}
+Narek Tumanyan, Michal Geyer, Shai Bagon, and Tali Dekel.
+\newblock Plug-and-play diffusion features for text-driven image-to-image translation.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 1921--1930, 2023.
+
+\bibitem{brooks2023instructpix2pix}
+Tim Brooks, Aleksander Holynski, and Alexei~A Efros.
+\newblock Instructpix2pix: Learning to follow image editing instructions.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 18392--18402, 2023.
+
+\bibitem{geng2023instructdiffusion}
+Zigang Geng, Binxin Yang, Tiankai Hang, Chen Li, Shuyang Gu, Ting Zhang, Jianmin Bao, Zheng Zhang, Han Hu, Dong Chen, et~al.
+\newblock Instructdiffusion: A generalist modeling interface for vision tasks.
+\newblock {\em arXiv preprint arXiv:2309.03895}, 2023.
+
+\bibitem{zhuge2023mindstorms}
+Mingchen Zhuge, Haozhe Liu, Francesco Faccio, Dylan~R Ashley, R{\'o}bert Csord{\'a}s, Anand Gopalakrishnan, Abdullah Hamdi, Hasan Abed Al~Kader Hammoud, Vincent Herrmann, Kazuki Irie, et~al.
+\newblock Mindstorms in natural language-based societies of mind.
+\newblock {\em arXiv preprint arXiv:2305.17066}, 2023.
+
+\bibitem{wei2022chain}
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed~Chi, Quoc~V Le, Denny Zhou, et~al.
+\newblock Chain-of-thought prompting elicits reasoning in large language models.
+\newblock {\em Advances in Neural Information Processing Systems}, 35:24824--24837, 2022.
+
+\bibitem{huang2022towards}
+Jie Huang and Kevin Chen-Chuan Chang.
+\newblock Towards reasoning in large language models: A survey.
+\newblock {\em arXiv preprint arXiv:2212.10403}, 2022.
+
+\bibitem{Touvron2023LLaMAOA}
+Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timoth{\'e}e Lacroix, Baptiste Rozi{\`e}re, Naman Goyal, Eric Hambro, Faisal Azhar, Aurelien Rodriguez, Armand Joulin, Edouard Grave, and Guillaume Lample.
+\newblock Llama: Open and efficient foundation language models.
+\newblock {\em ArXiv}, abs/2302.13971, 2023.
+
+\bibitem{brown2020language}
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared~D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, et~al.
+\newblock Language models are few-shot learners.
+\newblock {\em Advances in neural information processing systems}, 33:1877--1901, 2020.
+
+\bibitem{zhuge2024language}
+Mingchen Zhuge, Wenyi Wang, Louis Kirsch, Francesco Faccio, Dmitrii Khizbullin, and Jurgen Schmidhuber.
+\newblock Language agents as optimizable graphs.
+\newblock {\em arXiv preprint arXiv:2402.16823}, 2024.
+
+\bibitem{alayrac2022flamingo}
+Jean-Baptiste Alayrac, Jeff Donahue, Pauline Luc, Antoine Miech, Iain Barr, Yana Hasson, Karel Lenc, Arthur Mensch, Katherine Millican, Malcolm Reynolds, et~al.
+\newblock Flamingo: a visual language model for few-shot learning.
+\newblock {\em Advances in neural information processing systems}, 35:23716--23736, 2022.
+
+\bibitem{zhang2023multimodal}
+Zhuosheng Zhang, Aston Zhang, Mu~Li, Hai Zhao, George Karypis, and Alex Smola.
+\newblock Multimodal chain-of-thought reasoning in language models.
+\newblock {\em arXiv preprint arXiv:2302.00923}, 2023.
+
+\bibitem{chakrabarty2023spy}
+Tuhin Chakrabarty, Arkadiy Saakyan, Olivia Winn, Artemis Panagopoulou, Yue Yang, Marianna Apidianaki, and Smaranda Muresan.
+\newblock I spy a metaphor: Large language models and diffusion models co-create visual metaphors.
+\newblock In {\em Findings of the Association for Computational Linguistics: ACL 2023}, pages 7370--7388, 2023.
+
+\bibitem{li2023blip}
+Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi.
+\newblock Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models.
+\newblock In {\em International conference on machine learning}, pages 19730--19742. PMLR, 2023.
+
+\bibitem{liu2024visual}
+Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong~Jae Lee.
+\newblock Visual instruction tuning.
+\newblock {\em Advances in neural information processing systems}, 36, 2024.
+
+\bibitem{zhu2023minigpt}
+Deyao Zhu, Jun Chen, Xiaoqian Shen, Xiang Li, and Mohamed Elhoseiny.
+\newblock Minigpt-4: Enhancing vision-language understanding with advanced large language models.
+\newblock {\em arXiv preprint arXiv:2304.10592}, 2023.
+
+\bibitem{koh2024generating}
+Jing~Yu Koh, Daniel Fried, and Russ~R Salakhutdinov.
+\newblock Generating images with multimodal language models.
+\newblock {\em Advances in Neural Information Processing Systems}, 36, 2024.
+
+\bibitem{sun2023generative}
+Quan Sun, Qiying Yu, Yufeng Cui, Fan Zhang, Xiaosong Zhang, Yueze Wang, Hongcheng Gao, Jingjing Liu, Tiejun Huang, and Xinlong Wang.
+\newblock Generative pretraining in multimodality.
+\newblock {\em arXiv preprint arXiv:2307.05222}, 2023.
+
+\bibitem{wu2023visual}
+Chenfei Wu, Shengming Yin, Weizhen Qi, Xiaodong Wang, Zecheng Tang, and Nan Duan.
+\newblock Visual chatgpt: Talking, drawing and editing with visual foundation models.
+\newblock {\em arXiv preprint arXiv:2303.04671}, 2023.
+
+\bibitem{NEURIPS2023_3a7f9e48}
+Weixi Feng, Wanrong Zhu, Tsu-Jui Fu, Varun Jampani, Arjun Akula, Xuehai He, S~Basu, Xin~Eric Wang, and William~Yang Wang.
+\newblock Layoutgpt: Compositional visual planning and generation with large language models.
+\newblock In A.~Oh, T.~Neumann, A.~Globerson, K.~Saenko, M.~Hardt, and S.~Levine, editors, {\em Advances in Neural Information Processing Systems}, volume~36, pages 18225--18250. Curran Associates, Inc., 2023.
+
+\bibitem{fu2023guiding}
+Tsu-Jui Fu, Wenze Hu, Xianzhi Du, William~Yang Wang, Yinfei Yang, and Zhe Gan.
+\newblock Guiding instruction-based image editing via multimodal large language models.
+\newblock {\em arXiv preprint arXiv:2309.17102}, 2023.
+
+\bibitem{xu2023versatile}
+Xingqian Xu, Zhangyang Wang, Gong Zhang, Kai Wang, and Humphrey Shi.
+\newblock Versatile diffusion: Text, images and variations all in one diffusion model.
+\newblock In {\em Proceedings of the IEEE/CVF International Conference on Computer Vision}, pages 7754--7765, 2023.
+
+\bibitem{rabiner1989tutorial}
+Lawrence~R Rabiner.
+\newblock A tutorial on hidden markov models and selected applications in speech recognition.
+\newblock {\em Proceedings of the IEEE}, 77(2):257--286, 1989.
+
+\bibitem{esser2021taming}
+Patrick Esser, Robin Rombach, and Bjorn Ommer.
+\newblock Taming transformers for high-resolution image synthesis.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and pattern recognition}, pages 12873--12883, 2021.
+
+\bibitem{ozcelik2023brain}
+Furkan Ozcelik and Rufin VanRullen.
+\newblock Brain-diffuser: Natural scene reconstruction from fmri signals using generative latent diffusion.
+\newblock {\em arXiv preprint arXiv:2303.05334}, 2023.
+
+\bibitem{ramesh2022hierarchical}
+Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen.
+\newblock Hierarchical text-conditional image generation with clip latents.
+\newblock {\em arXiv preprint arXiv:2204.06125}, 1(2):3, 2022.
+
+\bibitem{allen2022massive}
+Emily~J Allen, Ghislain St-Yves, Yihan Wu, Jesse~L Breedlove, Jacob~S Prince, Logan~T Dowdle, Matthias Nau, Brad Caron, Franco Pestilli, Ian Charest, et~al.
+\newblock A massive 7t fmri dataset to bridge cognitive neuroscience and artificial intelligence.
+\newblock {\em Nature neuroscience}, 25(1):116--126, 2022.
+
+\bibitem{lin2014microsoft}
+Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva Ramanan, Piotr Doll{\'a}r, and C~Lawrence Zitnick.
+\newblock Microsoft coco: Common objects in context.
+\newblock In {\em Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13}, pages 740--755. Springer, 2014.
+
+\bibitem{openai2023gpt}
+OpenAI.
+\newblock Gpt-4v (ision) system card.
+\newblock 2023.
+
+\bibitem{openai2023dalle3}
+OpenAI.
+\newblock Dall-e3 system card.
+\newblock 2023.
+
+\bibitem{paszke2019pytorch}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et~al.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock {\em Advances in neural information processing systems}, 32, 2019.
+
+\bibitem{zhang2024magicbrush}
+Kai Zhang, Lingbo Mo, Wenhu Chen, Huan Sun, and Yu~Su.
+\newblock Magicbrush: A manually annotated dataset for instruction-guided image editing.
+\newblock {\em Advances in Neural Information Processing Systems}, 36, 2024.
+
+\bibitem{radford2021learning}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et~al.
+\newblock Learning transferable visual models from natural language supervision.
+\newblock In {\em International conference on machine learning}, pages 8748--8763. PMLR, 2021.
+
+\bibitem{oquab2023dinov2}
+Maxime Oquab, Timoth{\'e}e Darcet, Th{\'e}o Moutakanni, Huy Vo, Marc Szafraniec, Vasil Khalidov, Pierre Fernandez, Daniel Haziza, Francisco Massa, Alaaeldin El-Nouby, et~al.
+\newblock Dinov2: Learning robust visual features without supervision.
+\newblock {\em arXiv preprint arXiv:2304.07193}, 2023.
+
+\bibitem{gal2022stylegan}
+Rinon Gal, Or~Patashnik, Haggai Maron, Amit~H Bermano, Gal Chechik, and Daniel Cohen-Or.
+\newblock Stylegan-nada: Clip-guided domain adaptation of image generators.
+\newblock {\em ACM Transactions on Graphics (TOG)}, 41(4):1--13, 2022.
+
+\bibitem{ruiz2023dreambooth}
+Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman.
+\newblock Dreambooth: Fine tuning text-to-image diffusion models for subject-driven generation.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 22500--22510, 2023.
+
+\bibitem{mokady2023null}
+Ron Mokady, Amir Hertz, Kfir Aberman, Yael Pritch, and Daniel Cohen-Or.
+\newblock Null-text inversion for editing real images using guided diffusion models.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pages 6038--6047, 2023.
+
+\bibitem{patashnik2021styleclip}
+Or~Patashnik, Zongze Wu, Eli Shechtman, Daniel Cohen-Or, and Dani Lischinski.
+\newblock Styleclip: Text-driven manipulation of stylegan imagery.
+\newblock In {\em Proceedings of the IEEE/CVF international conference on computer vision}, pages 2085--2094, 2021.
+
+\bibitem{hu2023animate}
+Li~Hu, Xin Gao, Peng Zhang, Ke~Sun, Bang Zhang, and Liefeng Bo.
+\newblock Animate anyone: Consistent and controllable image-to-video synthesis for character animation.
+\newblock {\em arXiv preprint arXiv:2311.17117}, 2023.
+
+\end{thebibliography}

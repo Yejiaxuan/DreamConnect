@@ -1,0 +1,50 @@
+\section{Introduction}
+% The decoding of human brain activity has garnered considerable attention recently, owing to its unparalleled convenience and potential in human-computer interaction. 
+% The fMRI signal, derived from probing the human brain, has provided remarkable insights into human-mind interactions, inspired by sophisticated machine learning analyses~\cite{vanrullen2019reconstructing,dado2022hyperrealistic,shen2019deep,seeliger2018generative,NEURIPS2022_bee5125b,gu2022decoding}. 
+The emergence of deep generative models~\cite{rombach2022high,ho2020denoising,takagi2023high,chen2023seeing,scotti2023reconstructing,lu2023minddiffuser,sun2024contrast,shen2024neuro,xia2024dream} has effectively bridged the modality gap between functional Magnetic Resonance Imaging (fMRI)~\cite{ogawa1990oxygenation} and diverse signals like visual, language, and audio.
+%Yet, despite profound
+% Despite the great strides in unraveling the mysteries of human cognition~\cite{he2022masked,bai2023dreamdiffusion,chen2023cinematic,mai2023unibrain},
+However, many studies~\cite{,bai2023dreamdiffusion,lan2023seeing,zeng2023controllable,vanrullen2019reconstructing,dado2022hyperrealistic,shen2019deep,seeliger2018generative,NEURIPS2022_bee5125b,gu2022decoding,liu2024mind} focus on recovering the stimulated signal from brain activity, while interaction with reality requires active communication with human brain signals.
+%practical applications or interactions often require the translation of fMRI signals into alternative modalities. 
+% \mc{Comment: Honestly, it will be confusing why we don't need the translation. We should list explanations (if we have experiments to support, that would be great). Like (1) the drawback of using middle modalities, (2) improving efficiency... Rather than illustrations in pure language} 
+% This intermediary preprocessing not only complicates manual intervention but also causes the potential for cumulative errors.\mc{Comments:  it is better to add factual evidence or reference here} For instance, envision an artist endeavoring to refine an intricately crafted mental image. Before making any adjustments, they must first externalize their conceptualizations, needlessly augmenting complexity and susceptibility to errors. \mc{Comments: super hard to understand this sentence  from "for instance ...".}
+
+% If such capability were attainable, it would not only introduce innovative interaction paradigms but also effectively mitigate potential error accumulation. 
+% \mc{Comments: Personally, it is hard for me to buy into it (as a reader) with only word illustrations.}
+% Consequently, an artist could seamlessly refine their creative designs within their mind, thereby streamlining this laborious pipeline and advancing closer to the concept of "what we think is what we do." 
+% Hence, this paper delves into the possibility of instructing fMRI signals using natural language. 
+In this work, we explore a novel setting as shown in Fig.~\ref{fig:teaser} -- \emph{Can ``dreams'' be connected and actively influenced?} Such capability will present a novel and convenient interaction paradigm among people, facilitating numerous applications such as creative design via brainstorming.
+The essence of this capability lies in steering the human ``dreams'' towards desired directions, ultimately \emph{enabling concept manipulation through direct operation on the fMRI signal}. 
+This paper mainly focuses on human ``dreams'' as a visual modality, but the fMRI signal can also store other types of stimulated information, such as audio~\cite{defossez2023decoding} or language~\cite{zhao2024mapguide}. Consequently, our proposed approach can be seamlessly extended to these scenarios.
+
+
+This task requires direct instruction of fMRI signals, which presents notable challenges on two fronts: 1) The inherent abstractness and ambiguity of collected brain signals often impede the comprehension of their content; 
+% One approach to alleviate this recognition difficulty involves leveraging prior knowledge during the reconstruction process, such as pre-trained features extracted from VQ-VAE~\cite{van2017neural,esser2021taming}~\cite{vanrullen2019reconstructing}, or incorporating natural generative priors~\cite{takagi2023high} from the Stable Diffusion (SD)~\cite{rombach2022high} backbone. While enhancing the generative quality with rich contextual information, this process can inadvertently introduce irrelevant hallucinations, as abundant prior details are incorporated for realistic reconstruction. 
+2) A significant modality gap exists between fMRI signals and natural language instructions, hindering the learning of accurate associations between brain activity features and language instructions. Since not all the information within the fMRI signals is relevant to the intended instruction, successful instruction requires \emph{pinpointing and modifying the relevant features while preserving the irrelevant ones}.  
+% \mc{Comments: Is that the focus of this paper? I don't think so, because this is a problem for all related work in this field. Double check: Is it appropriate to put it in the Introduction, especially in the middle rather than at the first several paragraphs?}
+
+
+
+We introduce \textbf{\model{}}, a dual-stream diffusion framework tailored for fMRI signal instruction to address these challenges. The key is to \emph{effectively guide language instructions to hone in on and modify the pertinent information embedded within fMRI signals}. To establish a correlation between these distinct signals, we first employ a Stable Diffusion (SD)~\cite{rombach2022high} backbone to interpret brain activity using visual prior knowledge. Then, we integrate language instructions into a parallel SD backbone to manipulate the acquired visual priors.  %\mc{Comments: make sense}
+% Leveraging the visual-language prior and harnessing the capabilities of the UNet Backbone~\cite{ju2024brushnet}, we introduce another diffusion network with a similar structure to guide the intermediate features. 
+This parallel forwarding approach has proven to be effective in improving network learning ability by leveraging the homogeneous nature of the extracted features~\cite{zhang2023adding}. To bridge these two streams, i.e., the interpretation stream and instruction stream, we introduce an adaptor network designed to modulate the intermediate visual contents from the interpretation stream hierarchically.
+
+Ideally, with this design, the framework will operate under a \emph{progressive interpretation and instruction paradigm, concurrently identifying and manipulating correlated regions}. However, the diffusion operation behaves distinctively along the temporal dimension, synthesizing varied content across different time steps~\cite{zhang2023prospect,Zhang_2023_inst}. At specific time steps, the second stream must identify specific visual features for instruction, necessitating that the first stream completes their formation beforehand. Therefore, we devise an asynchronous diffusion strategy to ensure that the first stream has adequate time to develop overall semantics, thereby facilitating smooth manipulation progress. Additionally, to further guide the model toward intended spatial locations, we introduce a Large Language Model (LLM)~\cite{wei2022emergent} agent tasked with identifying regions relevant to instructions. Using the identified areas, we implement a region-aware attention strategy to ensure that the instructions are applied precisely within those regions.
+% \mc{Comment: I want to make a rather important point: current technology does not seem to have a 100\% direct correlation with the challenges discussed earlier. It isn't very much designed to address these challenges.}
+% Through this comprehensive design, our framework not only decodes the fMRI signal but also accomplishes instruction within a unified framework.
+\textbf{Our main contributions can be summarized as:}
+
+\noindent \textbf{(1)} We propose a visual brainstorming instruction system, named \textbf{\model{}}, empowering users to effectively interfacing with human ``dreams'' to perform desired operation.
+
+\noindent \textbf{(2)} We devise a dual-stream diffusion network coupled with an adaptor to seamlessly translate fMRI signals towards their intended directions.
+
+ \noindent \textbf{(3)} We introduce an asynchronous diffusion strategy, enhanced with LLM-guided region-aware manipulation, to facilitate faithful instruction within pertinent regions from both temporal and spatial perspectives.
+\noindent \textbf{(4)} While designed for language-guided instruction, our framework can readily adapt to visual instruction or multi-modal instruction with minimal adjustments.
+
+
+% \mc{I think current version of this introduction need some revisions (by seniors), and also adding some detailed demonstrations to support our claims (by the first two authors).}
+% \textbf{1)} Introducing a diffusion-based dual-stream instruction system, named \textbf{MindSculpt}, enabling users to efficiently guide the fMRI-to-Image generation process.
+% \textbf{2)} Development of a multi-scale adaptor aimed at progressively modulating the fMRI-reconstructed visual features, integrating them into an instruction diffusion network for targeted operations.
+% \textbf{3)} Designing an asynchronous diffusion strategy to enhance the robust utilization of modulated features and prior instruction knowledge, facilitating effective exploitation of fMRI features.
+% \textbf{4)} Despite being specifically tailored for language-guided instruction, our framework is easily adaptable to visual instruction or multi-modal instruction with minimal modifications.
+

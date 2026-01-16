@@ -1,0 +1,178 @@
+% if you need to pass options to natbib, use, e.g.:
+    % \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2024
+
+
+% ready for submission
+% \usepackage{neurips_2024}
+
+
+\RequirePackage{fix-cm}
+\documentclass[twocolumn]{svjour3}          % twocolumn
+%
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+\usepackage{cite}
+\usepackage[pdftex]{graphicx}
+\usepackage{ragged2e}
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{rotating}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb} % define this before the line numbering.
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{amsfonts}
+\usepackage{pifont}
+\usepackage{xspace}
+\usepackage{etoolbox}
+\usepackage{overpic}
+\usepackage{color}
+\usepackage{microtype}
+
+\usepackage{booktabs}
+\usepackage{makecell}
+%\usepackage{breakurl}
+\usepackage{threeparttable}
+\usepackage{bbding}
+\usepackage[numbers]{natbib} 
+\usepackage{algorithm}
+\usepackage{bm}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{appendix}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{arydshln}
+\usepackage{colortbl}
+\usepackage{caption}  
+\usepackage{graphicx} 
+\usepackage{array}  
+\usepackage{algpseudocode}
+
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\equref}[1]{Equ.~(\ref{#1})}
+\newcommand{\secref}[1]{\S\ref{#1}}
+% \newcommand{\algref}[1]{Alg.~\ref{#1}}
+
+\newcommand{\orcid}[1]{\href{https://orcid.org/#1}{\includegraphics[width=10pt]{ocrid.png}}}
+
+\newcommand{\ourDataset}{CDS2K}
+\newcommand{\sArt}{state-of-the-art }
+\newcommand{\rev}[1]{{\textcolor{red}{#1}}}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\newcommand{\myPara}[1]{\vspace{.15in}\noindent$\bullet$~\textbf{#1}}
+
+\definecolor{myRed}{RGB}{219, 68, 55}
+\definecolor{myGreen}{RGB}{15, 157, 88}
+\definecolor{myBlue}{RGB}{66, 133, 244}
+
+\newcommand{\tr}[1]{{\textcolor{myRed}{\textbf{#1}}}}
+\newcommand{\tg}[1]{{\textcolor{myGreen}{\textbf{#1}}}}
+\newcommand{\tb}[1]{{\textcolor{myBlue}{\textbf{#1}}}}
+
+\def\eg{\emph{e.g.}}
+\def\ie{\emph{i.e.}}
+\def\etc{{\em etc.}}
+\def\etal{{\em et al.}}
+
+\definecolor{mygray1}{gray}{.77}
+\definecolor{mygray2}{gray}{.92}
+
+\definecolor{CiteColor}{RGB}{0, 113, 188}
+
+\usepackage[breaklinks=true,citecolor=blue, colorlinks]{hyperref}
+
+\graphicspath{{./}}
+\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+
+
+\usepackage{silence}
+\hbadness=10000 \vbadness=10000
+
+\definecolor{personcolor}{RGB}{234, 60, 49}
+\definecolor{othervehiclecolor}{RGB}{96,81,242}
+\definecolor{mygrey}{gray}{0.9}
+
+\newcommand{\mc}[1]{\textcolor{orange}{\textbf{Mingchen:} #1}}
+\newcommand{\model}{DreamConnect}
+
+
+% \title{DreamConnect: Connecting Dreams with Visual Brainstorming Instruction}
+\title{Connecting Dreams with Visual \\Brainstorming Instruction}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+\author{
+  Yasheng Sun$^{1}$\orcid{0000-0002-5245-7518} \and
+  Bohan Li$^{2}$\orcid{0000-0002-5245-7518} \and
+  Mingchen Zhuge$^{3}$\orcid{0000-0002-5245-7518}\\ 
+  Deng-Ping Fan$^{4*}$\orcid{0000-0002-5245-7518} \and
+  Salman Khan$^{5}$\orcid{0000-0002-5245-7518} \and \\
+  Fahad Shahbaz Khan$^{5}$\orcid{0000-0002-5245-7518} \and
+  Hideki Koike$^{1}$\orcid{0000-0002-5245-7518}
+  % Ge-Peng Ji$^2$ \orcid{0000-0001-7092-2877} \and
+  % Peng Xu$^3$ \orcid{0000-0002-6431-1110} \and \\
+  % Ming-Ming Cheng$^4$ \orcid{0000-0001-5550-8758} \and
+  % Christos Sakaridis$^1$ \orcid{0000-0003-1127-8887} \and
+  % Luc Van Gool$^1$ \orcid{0000-0002-3445-5711}
+}
+
+\authorrunning{Sun~\etal} % if too long for running head
+
+\institute{
+$^1$ CS, Tokyo Institute of Technology, Tokyo 152-8550, Japan. \\
+$^2$ CS, Shanghai Jiaotong University, Shanghai 200240, China. \\
+$^3$ Center of Excellence for Generative AI, KAUST, Thuwal 23955-6900, Saudi Arabia. \\
+$^4$ CS, Nankai University, Tianjin 300350, China. \\
+$^5$ CV Group, MBZUAI, Abu Dhabi 20015, UAE. \\
+$^*$ Corresponding author: D.-P. Fan (dengpfan@gmail.com)\\
+}
+
+\date{Received: date / Accepted: date}
+
+
+% \journalname{Visual Intelligence}
+\journalname{}
+
+\begin{document}
+
+\maketitle
+
+\begin{figure*}[h]
+% \vspace{-2em}  
+  \centering
+  % \includegraphics[width=1.0 \textwidth]{figs/teaser.pdf} 
+  \includegraphics[width=1.0 \textwidth]{figs/teaser1.pdf} 
+
+  % \vspace{-5pt}
+  % \caption{Given a sequence of brain signals and a corresponding instruction, \textbf{\model{}} precisely performs the desired operation on the visual content. For instance, if an individual envisions a lake view (as shown in the first row) and intends to transform it into a sunset scene (as indicated in the second row), our system accurately generates the desired sunset scene (displayed in the third row).}
+  \caption{\textit{Can dreams be connected and actively influenced in future applications?} As can be seen, \textbf{\model{}} precisely performs the desired operation on the visual content. For example, suppose someone imagines a lake view (see \textbf{the first row}) and another one considers changing it to a sunset scene (\textbf{the second row}). In that case, our system faithfully generates the desired sunset ambiance (\textbf{the third row}).}
+  \label{fig:teaser}
+  % \vspace{-5pt}
+\end{figure*}
+
+
+\input{sections/abstract}
+\input{sections/intro}
+\input{sections/related}
+\input{sections/method}
+\input{sections/experiment}
+\input{sections/conclusion}
+\input{sections/declarations}
+
+\bibliographystyle{unsrt}
+\bibliography{egbib}
+
+
+\input{sections/appendix}
+% \input{sections/checklist}
+
+\end{document}
