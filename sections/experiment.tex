@@ -2,68 +2,43 @@
 \begin{figure*}[t!]
   \centering
   \includegraphics[width=.98\linewidth]{figs/data_pipeline2.pdf}
-  \caption{\textbf{Illustration of Dataset Pipeline.} 
+  \caption{\textbf{Illustration of Dataset Pipeline.}
   Given the paired fMRI signal $X$ and its corresponding visual stimuli $Y$ in NSD~\cite{allen2022massive}, we first query LLMs with image caption to obtain possible instruction $I$. Then the instruction, coupled with visual stimuli, is utilized prompt a visual instruction model for manipulated image $Y^{edit}$.
   Finally, the triplets of $(X, I, Y^{edit})$, are constructed (red boxes).
   }
   \label{fig:data_pipeline}
-  % \vspace{-5pt}
 \end{figure*}
 
 
 
-\textbf{Datasets.} To validate our proposed approach, we leverage the NSD~\cite{allen2022massive} dataset, the largest neuro-imaging dataset containing densely sampled fMRI data. 
-Participants are asked to view 9000-10000 different pictures over 30-40 MRI scanning sessions. 
+\textbf{Datasets.} To validate our proposed approach, we leverage the NSD~\cite{allen2022massive} dataset, the largest neuro-imaging dataset containing densely sampled fMRI data.
+Participants are asked to view 9000-10000 different pictures over 30-40 MRI scanning sessions.
 These images are extracted from COCO dataset~\cite{lin2014microsoft}, and corresponding captions are also available. In our experiments, we choose subject 1 from NSD.
-For each subject, a total of 9841 image stimuli are presented, with 982 images set aside for validation. 
+For each subject, a total of 9841 image stimuli are presented, with 982 images set aside for validation.
 In our setting, we require triplets of fMRI data, instructions and edited images to train and evaluate our model.
-Since such a dataset does not exist, we augment the NSD dataset using Large Language Models (LLMs), as illustrated in Fig.~\ref{fig:data_pipeline}. Specifically, LLMs generate instructions, while a pre-trained visual instruction model accounts for obtaining corresponding edited image. For easy access, we utilize text-davinci-003 engine of ChatGPT~\cite{brown2020language} for in-context instruction synthesis and instructDiffusion~\cite{geng2023instructdiffusion} for visual instruction. Replacing these with more advanced models such as GPT-4V(ison)~\cite{openai2023gpt} or DALL·E 3~\cite{openai2023dalle3} could further improve the dataset quality. 
+Since such a dataset does not exist, we augment the NSD dataset using Large Language Models (LLMs), as illustrated in Fig.~\ref{fig:data_pipeline}. Specifically, LLMs generate instructions, while a pre-trained visual instruction model accounts for obtaining corresponding edited image. For easy access, we utilize text-davinci-003 engine of ChatGPT~\cite{brown2020language} for in-context instruction synthesis and instructDiffusion~\cite{geng2023instructdiffusion} for visual instruction. Replacing these with more advanced models such as GPT-4V(ison)~\cite{openai2023gpt} or DALL·E 3~\cite{openai2023dalle3} could further improve the dataset quality.
 
-\paragraph{Implementation. } During the training stage, we freeze the UNet backbones of both the first and second streams to fully leverage the visual priors pre-trained. The overall training process is divided into two stages. In the first stage, we target to translate fMRI signal into the visual domain by regressing the intermediate features of CLIP vision/text embedding. The architecture of the regression network and the training paradigms follow protocols similar to MindEye~\cite{scotti2023reconstructing}. Once the parameters of this stream have been trained, they are frozen. The adaptor that bridges two streams is finetuned using our extended synthesized dataset. We employ the Mean Squared Error (MSE) Loss~\cite{ho2020denoising} typical in diffusion models as our optimization objective.
-Since each image stimulus includes three trials, a total of 24980 trials and 8859 visual stimuli are involved in the training set. For fMRI data with multiple trials, we average their responses for consistency. 
+\paragraph{Implementation. } During the training stage, we freeze the UNet backbones of both the first and second streams to fully leverage the visual priors pre-trained. The overall training process is divided into two stages. In the first stage, we target to translate fMRI signal into the visual domain by regressing the intermediate features of CLIP vision/text embedding. The architecture of the regression network and the training paradigms follow protocols similar to MindEye~\cite{scotti2023reconstructing}. Once the parameters of this stream have been trained, they are frozen. The adaptor that bridges two streams is finetuned using our extended synthesized dataset.
+We employ the Mean Squared Error (MSE) Loss~\cite{ho2020denoising} typical in diffusion models as our optimization objective.
+Since each image stimulus includes three trials, a total of 24980 trials and 8859 visual stimuli are involved in the training set. For fMRI data with multiple trials, we average their responses for consistency.
 For our framework and all the compared models, we set the classifier-free scale to 7.5 for image instruction.
-Our models are implemented in PyTorch~\cite{paszke2019pytorch} and trained using 80G Tesla A100 GPUs. 
+Our models are implemented in PyTorch~\cite{paszke2019pytorch} and trained using 80G Tesla A100 GPUs.
 
 
-\paragraph{Comparisons.} Although our framework is designed for fMRI signal instruction, it also supports basic function of reconstruction. Therefore, we validate our method from both the reconstruction and the instruction perspectives. For image reconstruction, we compare our method with the best models currently available that support fMRI-based image reconstruction: Takagi \emph{et.al.}~\cite{takagi2023high}, UniBrain~\cite{mai2023unibrain}, Brain-Diffuser~\cite{ozcelik2023brain} and MindEye~\cite{scotti2023reconstructing}. 
-Takagi \emph{et.al.}~\cite{takagi2023high} pioneered the utilization of image priors from Stable Diffusion (SD)~\cite{esser2021taming} for fMRI-based image reconstruction. 
-UniBrain~\cite{mai2023unibrain} demonstrates the capability to translate fMRI signals to both image captions and images simultaneously. 
+\paragraph{Comparisons.} Although our framework is designed for fMRI signal instruction, it also supports basic function of reconstruction. Therefore, we validate our method from both the reconstruction and the instruction perspectives. For image reconstruction, we compare our method with the best models currently available that support fMRI-based image reconstruction: Takagi \emph{et.al.}~\cite{takagi2023high}, UniBrain~\cite{mai2023unibrain}, Brain-Diffuser~\cite{ozcelik2023brain} and MindEye~\cite{scotti2023reconstructing}.
+Takagi \emph{et.al.}~\cite{takagi2023high} pioneered the utilization of image priors from Stable Diffusion (SD)~\cite{esser2021taming} for fMRI-based image reconstruction.
+UniBrain~\cite{mai2023unibrain} demonstrates the capability to translate fMRI signals to both image captions and images simultaneously.
 Brain-Diffuser~\cite{ozcelik2023brain} and MindEye~\cite{scotti2023reconstructing} showcase the effectiveness of mapping to CLIP space in the VersatileDiffusion~\cite{xu2023versatile} setting.
-For instruction, we compare our method with state-of-the-art image manipulation approaches, including SDEdit~\cite{meng2021sdedit}, InstructPix2Pix~\cite{brooks2023instructpix2pix}, InstructDiffusion~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush}. 
+For instruction, we compare our method with state-of-the-art image manipulation approaches, including SDEdit~\cite{meng2021sdedit}, InstructPix2Pix~\cite{brooks2023instructpix2pix}, InstructDiffusion~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush}.
 SDEdit~\cite{meng2021sdedit} proposes to edit image with Stochastic Differential Equation (SDE).
 InstructPix2Pix~\cite{brooks2023instructpix2pix} directly trains a Stable Diffusion model conditioned on instructions. InstructDiffusion~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush} further extend the dataset and improve the model performance for instruction-based image editing.
 
 \subsection{Quantitative Evaluation}
 
-% Table 1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \setlength{\tabcolsep}{3pt}
-% \begin{table*}[t] %\footnotesize
-% \begin{center}  
-% \caption{\textbf{The quantitative results of image reconstruction on Natural Scenes Dataset (NSD)~\cite{allen2022massive}.}}
-% % \vspace{-2pt}
-% \label{table:rec}
-% \begin{tabular}{lcccccccc}
-% \toprule
-%  & \multicolumn{4}{c}{Low-Level}& \multicolumn{4}{c}{High-Level} \\
-% \cmidrule(lr){2-5} \cmidrule(lr){6-9}
-% Method & $\text{PixCorr}  \uparrow$&  $\text{SSIM}  \uparrow$  & Alex(2) $\uparrow $ & Alex(5) $\uparrow $ &  $\text{Incep} \uparrow $  & CLIP $ \uparrow $ & Eff $\downarrow$ & SwAV $\downarrow$\\
-
-% \midrule  
-% Takagi \emph{et.al.}~\cite{takagi2023high} & - & - & 0.830 & 0.830 & 0.760 & 0.770 & - & - \\
-% UniBrain~\cite{mai2023unibrain} & 0.249 & \underline{0.330} & 0.929 & 0.956 & 0.878 & 0.923 & 0.766 & 0.407\\
-% Brain-Diffuser~\cite{ozcelik2023brain} & 0.254 & \textbf{0.356} & 0.942 & 0.962 & 0.872 & 0.915 & 0.775 & 0.423 \\
-% MindEye~\cite{scotti2023reconstructing} & \underline{0.309} & 0.323 &  \underline{0.947} & \underline{0.978} & \underline{0.938} & \textbf{0.941} & \textbf{0.645} & \underline{0.367} \\
-% \hline
-% \textbf{MindSculpt}  & \textbf{0.327} & 0.315 & \textbf{0.951} & \textbf{0.978} & \textbf{0.939} & \underline{0.934} & \underline{0.653} & \textbf{0.360} \\
-% \bottomrule
-% \end{tabular}
-% \end{center}
-% \vspace{-5pt}
-% \end{table*}
 
 \begin{table*}[t]
-\setlength{\tabcolsep}{9pt} % Increase column separation
-\renewcommand{\arraystretch}{1.1} % Increase row separation
+\setlength{\tabcolsep}{9pt}
+\renewcommand{\arraystretch}{1.1}
 \centering
 \caption{\textbf{Quantitative results of image reconstruction on the Natural Scenes Dataset (NSD)~\cite{allen2022massive}.}}
 \label{table:rec}
@@ -81,18 +56,13 @@ MindEye~\cite{scotti2023reconstructing} & \underline{0.309} & 0.323 & \underline
 \rowcolor{mygrey} \textbf{\model{}} & \textbf{0.327} &  0.315 & \textbf{0.951} & \textbf{0.978} & \textbf{0.939} & \underline{0.934} & \underline{0.653} & \textbf{0.360} \\
 \bottomrule
 \end{tabular}
-% \vspace{-5pt}
 \end{table*}
 
 
-% Table 1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-% Table 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{table*}[t]
-\setlength{\tabcolsep}{11pt} % Increase column separation
-\renewcommand{\arraystretch}{1.1} % Increase row separation
+\setlength{\tabcolsep}{11pt}
+\renewcommand{\arraystretch}{1.1}
 \centering
 \caption{\textbf{Quantitative results of image instruction on the Natural Scenes Dataset (NSD)~\cite{allen2022massive}.}}
 \label{table:edit}
@@ -105,14 +75,11 @@ Method & InstructPix2Pix~\cite{brooks2023instructpix2pix} & InstructDiff~\cite{g
 \textbf{CLIP-D} & 0.090 & \underline{0.113} & 0.105 & 0.101 & \cellcolor{mygrey} \textbf{0.114} \\
 \bottomrule
 \end{tabular}
-% \vspace{-12pt}
 \end{table*}
 
-% Table 2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{table*}[t!]
-\setlength{\tabcolsep}{22pt} % Increase column separation
-\renewcommand{\arraystretch}{1.1} % Increase row separation
+\setlength{\tabcolsep}{22pt}
+\renewcommand{\arraystretch}{1.1}
 \centering
 \caption{\textbf{The ablation over model design on Natural Scenes Dataset (NSD)~\cite{allen2022massive}.}}
 \label{table:ablation}
@@ -121,16 +88,14 @@ Method & InstructPix2Pix~\cite{brooks2023instructpix2pix} & InstructDiff~\cite{g
 Method & wo / Asynch & wo / Adaptor Injection & wo / LLMs & \textbf{Full Model} \\
 \midrule
 \textbf{CLIP-I} & 0.639 & 0.600 & 0.650 & \cellcolor{mygrey} \textbf{0.657} \\
-\textbf{Dino-I} & 0.299 & 0.184 & 0.292 & \cellcolor{mygrey} \textbf{0.301} \\
+\textbf{Dino-I} & 0.299 & 0.184 & 0.292 & \cellcolor{mygrey} \underline{0.301} \\
 \textbf{CLIP-D} & 0.112 & \textbf{0.135} & 0.118 & \cellcolor{mygrey} 0.114 \\
 \bottomrule
 \end{tabular}
-% \vspace{-12pt}
 \end{table*}
 
 
 
-% Table 3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \textbf{Evaluation Metric.}  For image reconstruction, we use both low-level and high-level metrics to measure the semantic correctness of our results. Specifically, we choose \textbf{PixCorr}, \textbf{SSIM}, \textbf{Alex(2)} and \textbf{Alex(5)} for low-level measurements while \textbf{Incep}, \textbf{CLIP}, \textbf{Eff} and \textbf{SwAV} are utilized for high-level semantic evaluation, following the evaluation protocol of MindEye~\cite{scotti2023reconstructing}.
 For instruction-based evaluation, we use CLIP~\cite{radford2021learning} image similarity (\textbf{CLIP-I}) and Dino-V2~\cite{oquab2023dinov2} image similarity (\textbf{Dino-I}) to measure the cosine similarity between edited and original images. Additionally, we use CLIP text-image direction similarity~\cite{gal2022stylegan} (\textbf{CLIP-D}) evaluates how changes in images correspond to changes in their captions.
@@ -138,7 +103,7 @@ For instruction-based evaluation, we use CLIP~\cite{radford2021learning} image s
 \paragraph{Evaluation Results.} The comparison results for image reconstruction from fMRI signals are presented in Table~\ref{table:rec}. Our results exhibit superior performance in low-level semantic consistency and competitive results in high-level metrics. One possible reason for this is the mixed mapping strategy in the first stream, where we regress both CLIP visual and text embeddings via latent diffusion. We speculate that this practice helps strike a balance between low- and high-level semantic formation. Notably, although our framework is not specifically designed for the reconstruction task, it achieves performance comparable to specialized approaches.
 
 
-For image instruction performance, we present the comparison results in Table~\ref{table:edit}. Our method achieves superior results in Dino-V2 image similarity and CLIP text-image direction (CLIP-D) similarity, demonstrating its capability to manipulate visual imagery underlying fMRI signals aligned with human instruction. However, in the CLIP image similarity metric, our approach scores lower than InstructPix2Pix~\cite{brooks2023instructpix2pix} because they tend towards under-editing, making minimal changes to the input images. Consequently, their results show inferior performance in terms of the CLIP-D metric. 
+For image instruction performance, we present the comparison results in Table~\ref{table:edit}. Our method achieves superior results in Dino-V2 image similarity and CLIP text-image direction (CLIP-D) similarity, demonstrating its capability to manipulate visual imagery underlying fMRI signals aligned with human instruction. However, in the CLIP image similarity metric, our approach scores lower than InstructPix2Pix~\cite{brooks2023instructpix2pix} because they tend towards under-editing, making minimal changes to the input images. Consequently, their results show inferior performance in terms of the CLIP-D metric.
 
 
 \subsection{Qualitative Evaluation}
@@ -148,50 +113,20 @@ For image instruction performance, we present the comparison results in Table~\r
   \caption{\textbf{Qualitative Comparison.} In the first column list the visual stimulus of fMRI signal while the last column demonstrates input images used by other approaches. InstP2P~\cite{brooks2023instructpix2pix} struggles on capturing instruction intention (see last 4 rows). InstDiff~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush} tends to over-edit irrelevant regions (see toilet). SDEdit~\cite{meng2021sdedit} suffers from inferior image quality. Our method well balances the content preservation and instruction conformation.
   }
   \label{fig:qual}
-  % \vspace{-5pt}
 \end{figure*}
 
-\textbf{Image Generation Paradigm.} Since there are no similar studies supporting the direct instruction of fMRI signals, we adapt state-of-the-art image manipulation methods to evaluate the instruction capability of our model. Specifically, we first generate fMRI instructions using our approach. We then use the obtained intermediate reconstruction $Y^{Rec}$, along with the instruction text, as input to these methods for editing. 
-% This approach allows us to assess how effectively our model can manipulate visual content based on fMRI instructions.
+\textbf{Image Generation Paradigm.} Since there are no similar studies supporting the direct instruction of fMRI signals, we adapt state-of-the-art image manipulation methods to evaluate the instruction capability of our model. Specifically, we first generate fMRI instructions using our approach. We then use the obtained intermediate reconstruction $Y^{Rec}$, along with the instruction text, as input to these methods for editing.
 
-\paragraph{Evaluation Results.} We demonstrate the qualitative evaluation results in Figure~\ref{fig:qual}. We observe that InstructPix2Pix~\cite{brooks2023instructpix2pix} tends to preserve its original content and struggles to follow instructions (see the last 4 rows). In contrast, InstructDiffusion~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush} are capable of better following instructions, but often change irrelevant attributes (e.g., the object shape such as the toilet and robot, or the background). For SDEdit~\cite{meng2021sdedit}, it also faces challenges in preserving unrelated regions and suffers from inferior image quality. 
+\paragraph{Evaluation Results.} We demonstrate the qualitative evaluation results in Figure~\ref{fig:qual}. We observe that InstructPix2Pix~\cite{brooks2023instructpix2pix} tends to preserve its original content and struggles to follow instructions (see the last 4 rows). In contrast, InstructDiffusion~\cite{geng2023instructdiffusion} and MagicBrush~\cite{zhang2024magicbrush} are capable of better following instructions, but often change irrelevant attributes (e.g., the object shape such as the toilet and robot, or the background). For SDEdit~\cite{meng2021sdedit}, it also faces challenges in preserving unrelated regions and suffers from inferior image quality.
 In contrast, our approach strikes a balance between content preservation and instruction conformation (See the pose of the woman and the cactus shape), which we speculate is attributed to the dual-stream architecture where intermediate features are able to influence instruction progress constantly.
 It is worth noting that these approaches not only rely on our intermediate reconstruction results but also require tedious sequential operations. In contrast, our proposed framework enables direct fMRI signal instruction, streamlining the process.
 
 
 \subsection{Additional Results}
 
-% Table 3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \setlength{\tabcolsep}{12pt}
-% \begin{table*}[t!] %\footnotesize
-% \begin{center}  
-% \caption{\textbf{The ablation over model design on Natural Scenes Dataset (NSD)~\cite{allen2022massive}.}}
-% % \vspace{-2pt}
-% \label{table:ablation}
-% \begin{tabular}{lcccccccc}
-% \toprule
-%  % & \multicolumn{4}{c}{Low-Level}& \multicolumn{4}{c}{High-Level} \\
-% % \cmidrule(lr){2-5} \cmidrule(lr){6-9}
-% Method & wo / Asynch &
-% wo / Adaptor Injection &
-% wo / LLMs & Full Model \\
-
-% \midrule  
-% \textbf{CLIP-I}  & 0.639 & 0.600 & 0.650 & \textbf{0.657} \\
-% \textbf{Dino-I} & 0.299 & 0.184 & 0.292 & \textbf{0.301} \\
-% \textbf{CLIP-D} & 0.112 & \textbf{0.135} & 0.118 & 0.114 \\
-% % \hline
-% % \textbf{Mind-Sculpting}  & \textbf{0.327} & 0.315 & \textbf{0.951} & \textbf{0.978} & \textbf{0.939} \\
-% \bottomrule
-% \end{tabular}
-% \end{center}
-% \vspace{-12pt}
-% \end{table*}
-
 
 \begin{figure*}[t!]
   \centering
-  % \includegraphics[width=0.8\linewidth]{figs/ablation.pdf}
   \includegraphics[width=1.0\linewidth]{figs/ablation1.pdf}
   \caption{\textbf{Ablation Study.} Without feature injection from adaptor, the model struggles on balancing content preservation and instruction conformation. Removing asynchronous strategy brings difficulty on instruction conformation. Through the incorporation of LLMs guided region, our framework is able to precisely operate on relevant spatial locations (see the snow background and table region).
   }
@@ -203,17 +138,15 @@ It is worth noting that these approaches not only rely on our intermediate recon
 \paragraph{Ablation Study.} We conducted ablation studies focusing on three important aspects of our method: the asynchronous diffusion strategy, the injection of adaptor features, and the use of LLM-guided region-aware attention. The experiments were carried out by (1) removing the asynchronous paradigm, (2) eliminating adaptor feature injection, and (3) excluding the LLMs agent. The numerical results are shown in Table~\ref{table:ablation}, and the visualization results are presented in Fig.~\ref{fig:ablation}.
 Eliminating the asynchronous strategy makes it difficult for the instruction flow to comprehend aligned visual content, resulting in inferior performance.
 When adaptor feature injection is removed, the instruction flow lacks sufficient visual information to identify instruction-relevant regions. Consequently, the instruction results deviate from the interpreted visual contents of the first stream, leading to poor performance in terms of both CLIP and Dino image similarity.
-% Ignoring the pertinent visual content from fMRI could help high CLIP-D score but cause undesired generation results.
 Without LLMs, the model struggles to perform precise operations within the intended spatial regions.
 The full model effectively strikes a balance between identity preservation and instruction conformation, achieving visually pleasant results.
 
 
-\paragraph{Multi-Modal Instruction.} 
+\paragraph{Multi-Modal Instruction.}
 \begin{figure*}[t!]
   \centering
   \includegraphics[width=1.0\linewidth]{figs/style.pdf}
   \caption{\textbf{Demonstration Results of Multi-Modal Instruction.} First row list the visual stimulus while second row depict our intermediate reconstructions. The manipulation results via \emph{In the [V] style} are shown within red boxes of the last row.}
   \label{fig:style}
-  % \vspace{-5pt}
 \end{figure*}
 Here we showcase the ability of our model to handle multi-modal instruction and achieve style manipulation. With minimal effort, our model can be extended to support visual instruction. Specifically, we modify the instruction description to ``In the [V] style'' where the style ``[V]'' can be obtained using image inversion approaches~\cite{ruiz2023dreambooth,mokady2023null}. It is evident that our approach effectively captures the style of the reference image and applies it to the target.
