@@ -1,11 +1,15 @@
-\newpage
+﻿\newpage
 \clearpage
 \appendix
 \appendixpage
 
-\section{Implementation Details}
-\paragraph{Optimization Objective.}
-In addition to the typical MSE Loss~\cite{ho2020denoising} used in the Latent Diffusion Model (LDM), we also incorporate StyleCLIP~\cite{patashnik2021styleclip} loss to guide the model toward the correct manipulation direction.  Formally,
+% \section{Implementation Details}
+\section{实现细节}
+
+% \paragraph{Optimization Objective.}
+\paragraph{优化目标。}
+% In addition to the typical MSE Loss~\cite{ho2020denoising} used in the Latent Diffusion Model (LDM), we also incorporate StyleCLIP~\cite{patashnik2021styleclip} loss to guide the model toward the correct manipulation direction.  Formally,
+除了在潜在扩散模型（LDM）中使用的典型 MSE 损失~\cite{ho2020denoising} 之外，我们还引入了 StyleCLIP~\cite{patashnik2021styleclip} 损失，以引导模型朝正确的操纵方向发展。形式上表示为：
 
 \begin{equation}
 \begin{aligned}
@@ -16,29 +20,41 @@ In addition to the typical MSE Loss~\cite{ho2020denoising} used in the Latent Di
 \end{aligned}
 \end{equation}
 
-where $\mathcal{D}$ indicates the cosine similarity between two vectors.
-$Y$ and $T$ represent the original visual stimuli and its corresponding text, while the $\hat{Y}^{edit}$ and $T^{edit}$ are the synthesized result produced by our network and its corresponding ground truth caption, respectively. $\hat{Y}^{edit}$ can be estimated at each time step as follows:
+% where $\mathcal{D}$ indicates the cosine similarity between two vectors.
+其中 $\mathcal{D}$ 表示两个向量之间的余弦相似度。
+% $Y$ and $T$ represent the original visual stimuli and its corresponding text, while the $\hat{Y}^{edit}$ and $T^{edit}$ are the synthesized result produced by our network and its corresponding ground truth caption, respectively. $\hat{Y}^{edit}$ can be estimated at each time step as follows:
+$Y$ 和 $T$ 分别表示原始视觉刺激及其对应的文本，而 $\hat{Y}^{edit}$ 和 $T^{edit}$ 分别表示由我们的网络生成的合成结果及其对应的真实描述（ground truth caption）。$\hat{Y}^{edit}$ 可以在每个时间步长下进行如下估计：
 \begin{equation}
 \label{eq:decode_z}
     \hat{\textbf{z}}_0^e = (\textbf{z}_t^e - \sqrt{1-\overline{\alpha}_t} \bm{\epsilon}_{\theta} (\textbf{z}_t^e)) / \sqrt{\overline{\alpha}}_t,
 \end{equation}
-where the $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$.
-$\hat{Y}^{edit}$ can be decoded from $\hat{\textbf{z}}_0^e$.
-The functions $\textbf{F}_{vis}$ and $\textbf{F}_{text}$ represent the CLIP backbone used to extract the visual and text features, respectively.
-Such formulation ensures that the editing direction of the synthesized image aligns closely with the text direction in CLIP space.
-The overall loss function, which combines the style direction loss with the foundational LDM loss, is mathematically represented as:
+% where the $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$.
+其中 $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$。
+% $\hat{Y}^{edit}$ can be decoded from $\hat{\textbf{z}}_0^e$.
+$\hat{Y}^{edit}$ 可以从 $\hat{\textbf{z}}_0^e$ 中解码得到。
+% The functions $\textbf{F}_{vis}$ and $\textbf{F}_{text}$ represent the CLIP backbone used to extract the visual and text features, respectively.
+函数 $\textbf{F}_{vis}$ 和 $\textbf{F}_{text}$ 分别表示用于提取视觉和文本特征的 CLIP 骨干网络。
+% Such formulation ensures that the editing direction of the synthesized image aligns closely with the text direction in CLIP space.
+这种公式化设计确保了合成图像的编辑方向与 CLIP 空间中的文本方向紧密对齐。
+% The overall loss function, which combines the style direction loss with the foundational LDM loss, is mathematically represented as:
+将风格方向损失与基础 LDM 损失相结合，整体损失函数在数学上表示为：
 \begin{equation}
 \mathcal{L}=\mathcal{L}_{simple}+\sqrt{\bar{\alpha}_t} \mathcal{L}_{style},
 \end{equation}
-where $\sqrt{\bar{\alpha}_t}$ is leveraged to emphasize the supervision with lower noise input (i.e., smaller time-step) and reduce the impact with higher noise (i.e., larger time-step).
+% where $\sqrt{\bar{\alpha}_t}$ is leveraged to emphasize the supervision with lower noise input (i.e., smaller time-step) and reduce the impact with higher noise (i.e., larger time-step).
+其中利用 $\sqrt{\bar{\alpha}_t}$ 来强调较低噪声输入（即较小的时间步长）时的监督作用，并降低较高噪声（即较大的时间步长）时的影响。
 
 
-
-\paragraph{Inference Paradigm.} Given a target fMRI signal $X$, our goal is to interact with it through the instruction $I$. The primary objective is to manipulate the visual content within the human brain toward the desired direction, resulting in $Y^{edit}$. During inference, we first use $\bm{g}_\theta(\textbf{z}^r_t, X, t)$ to perform $K$ diffusion steps for basic feature formation from $X$. Building on this, the dual-stream diffusion model $\bm{\epsilon}_\theta(\textbf{z}^r_t, \textbf{z}^e_t, I, X, t)$ progressively guides the fMRI signal.
-After the diffusion process is complete, the latent code $\textbf{z}_0^e$ is transformed back to $Y^{edit}$ following Equation~\ref{eq:decode_z}. The detailed inference process is depicted in Algorithm~\ref{alg:test}.
+% \paragraph{Inference Paradigm.} Given a target fMRI signal $X$, our goal is to interact with it through the instruction $I$. The primary objective is to manipulate the visual content within the human brain toward the desired direction, resulting in $Y^{edit}$.
+\paragraph{推理范式。} 给定目标 fMRI 信号 $X$，我们的目标是通过指令 $I$ 与其进行交互。主要目标是操纵人脑内的视觉内容朝着预期的方向发展，从而生成 $Y^{edit}$。
+% During inference, we first use $\bm{g}_\theta(\textbf{z}^r_t, X, t)$ to perform $K$ diffusion steps for basic feature formation from $X$. Building on this, the dual-stream diffusion model $\bm{\epsilon}_\theta(\textbf{z}^r_t, \textbf{z}^e_t, I, X, t)$ progressively guides the fMRI signal.
+在推理过程中，我们首先使用 $\bm{g}_\theta(\textbf{z}^r_t, X, t)$ 执行 $K$ 个扩散步长，以从 $X$ 中形成基础特征。在此基础之上，双流扩散模型 $\bm{\epsilon}_\theta(\textbf{z}^r_t, \textbf{z}^e_t, I, X, t)$ 会逐步引导 fMRI 信号。
+% After the diffusion process is complete, the latent code $\textbf{z}_0^e$ is transformed back to $Y^{edit}$ following Equation~\ref{eq:decode_z}. The detailed inference process is depicted in Algorithm~\ref{alg:test}.
+在扩散过程完成后，潜在编码 $\textbf{z}_0^e$ 会按照公式~\ref{eq:decode_z} 转换回 $Y^{edit}$。详细的推理过程描述在算法~\ref{alg:test} 中。
 
 \begin{algorithm*}[!ht]
-  \caption{Inference of the asynchronous dual-stream diffusion model $\bm{\epsilon}_{\theta}$}
+%   \caption{Inference of the asynchronous dual-stream diffusion model $\bm{\epsilon}_{\theta}$}
+  \caption{异步双流扩散模型 $\bm{\epsilon}_{\theta}$ 的推理}
   \label{alg:sampling}
   \label{alg:test}
   \small
@@ -52,28 +68,34 @@ After the diffusion process is complete, the latent code $\textbf{z}_0^e$ is tra
     \EndFor
 
     \For{$t=T, \dotsc, K+1$}
-      \State $\textbf{z}^{nr} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ if $t > K+1$, else $\textbf{z}^{nr} = \mathbf{0}$
+%       \State $\textbf{z}^{nr} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ if $t > K+1$, else $\textbf{z}^{nr} = \mathbf{0}$
+      \State 如果 $t > K+1$，则 $\textbf{z}^{nr} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$，否则 $\textbf{z}^{nr} = \mathbf{0}$
       \State $\textbf{z}^{ne} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$
       \State $\textbf{z}^r_{t\textcolor{red}{-K}-1} = \frac{1}{\sqrt{\alpha_{t\textcolor{red}{-K}}}}\left( \textbf{z}^r_{t\textcolor{red}{-K}} - \frac{1-\alpha_{t\textcolor{red}{-K}}}{\sqrt{1-\bar{\alpha}_{t\textcolor{red}{-K}}}} \bm{g}_\theta(\textbf{z}^r_{t\textcolor{red}{-K}}, X,t\textcolor{red}{-K}) \right) + \sigma_{t\textcolor{red}{-K}} \textbf{z}^{nr}$
       \State $\textbf{z}^e_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left( \textbf{z}^e_{t} - \frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}} \bm{\epsilon}_\theta(\textbf{z}^r_{t\textcolor{red}{-K}}, \textbf{z}^e_{t}, I,X,t) \right) + \sigma_t \textbf{z}^{ne}$
     \EndFor
 
     \For{$t=K, \dotsc, 1$}
-      \State $\textbf{z}^{ne} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ if $t > 1$, else $\textbf{z}^{ne} = \mathbf{0}$
-      \State $\textbf{z}^e_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left( \textbf{z}^e_{t} - \frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}} \bm{\epsilon}_\theta(\textbf{z}^r_0, \textbf{z}^e_{t}, I,X,t) \right) + \sigma_t \textbf{z}^{ne}$
+%       \State $\textbf{z}^{ne} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$ if $t > 1$, else $\textbf{z}^{ne} = \mathbf{0}$
+      \State 如果 $t > 1$，则 $\textbf{z}^{ne} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$，否则 $\textbf{z}^{ne} = \mathbf{0}$
+      \State $\textbf{z}^e_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left( \textbf{z}^e_{t} - \frac{1-\alpha_t}{\sqrt{1-\bar{\alpha}_t}} \bm{\epsilon}_\theta(\textbf{z}^r_0, \textbf{z}^e_{t}, I,X,t) \right) + \sigma_t \textbf{z}^{ne}$  
 
     \EndFor
 
-    \State \textbf{return} $\textbf{z}^e_0$
+%     \State \textbf{return} $\textbf{z}^e_0$
+    \State \textbf{返回} $\textbf{z}^e_0$
     \vspace{.04in}
   \end{algorithmic}
 \end{algorithm*}
 
-\paragraph{Training Paradigm.}
-During training, the denoising operation is performed asynchronously, with the instruction flow lagging behind by $K$ time steps. The detailed training process of our dual-stream diffusion framework is outlined in Algorithm~\ref{alg:training}.
+% \paragraph{Training Paradigm.}
+\paragraph{训练范式。}
+% During training, the denoising operation is performed asynchronously, with the instruction flow lagging behind by $K$ time steps. The detailed training process of our dual-stream diffusion framework is outlined in Algorithm~\ref{alg:training}.
+在训练过程中，去噪操作是异步执行的，指令流滞后 $K$ 个时间步长。我们的双流扩散框架的详细训练过程概述于算法~\ref{alg:training} 中。
 
 \begin{algorithm*}[h]
-  \caption{Training of the asynchronous dual-stream diffusion model $\bm{\epsilon}_{\theta}$}
+%   \caption{Training of the asynchronous dual-stream diffusion model $\bm{\epsilon}_{\theta}$}
+  \caption{异步双流扩散模型 $\bm{\epsilon}_{\theta}$ 的训练}
   \label{alg:training}
   \small
   \begin{algorithmic}[1]
@@ -81,28 +103,43 @@ During training, the denoising operation is performed asynchronously, with the i
       \State $(\textbf{z}_0^e, \textbf{z}_0^r, I, X) \sim q(\textbf{z}_0^e, \textbf{z}_0^r, I, X)$
       \State $\bm{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I}), \bm{\epsilon}^r \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$
       \State $t \sim \text{Uniform}({K+1,\ldots,T})$
-      \State Take a gradient descent step on
+%       \State Take a gradient descent step on
+      \State 对以下目标执行梯度下降：
       \State
       $ \quad \nabla_\theta \left\| \bm{\epsilon} - \bm{\epsilon}_\theta(\sqrt{\bar{\alpha}_{t\textcolor{red}{-K}}} \textbf{z}_0^r+\sqrt{1-\bar{\alpha}_{t\textcolor{red}{-K}}} \bm{\epsilon}^r,
       \sqrt{\bar{\alpha}_{t}} \textbf{z}_0^e+\sqrt{1-\bar{\alpha}_{t}} \bm{\epsilon}, I, X, t) \right\|$
-    \Until{converged}
+%     \Until{converged}
+    \Until{收敛}
   \end{algorithmic}
 \end{algorithm*}
 
 
-\section{More Ablation Studies}
-In this section, we provide a detailed quantitative analysis of the components involved in our method.
-Firstly, we present both qualitative and quantitative results to illustrate the impact of varying asynchronous steps.
-Next, we offer further insights into the design of the dual-stream architecture.
-Finally, we include additional qualitative ablation results to demonstrate the effect of each part of our architecture.
+% \section{More Ablation Studies}
+\section{更多消融实验}
+% In this section, we provide a detailed quantitative analysis of the components involved in our method.
+在本节中，我们对我们的方法中所涉及的各个组件提供了详细的定量分析。
+% Firstly, we present both qualitative and quantitative results to illustrate the impact of varying asynchronous steps.
+首先，我们通过定性和定量结果来阐明不同异步步长所带来的影响。
+% Next, we offer further insights into the design of the dual-stream architecture.
+接下来，我们对双流架构的设计提供进一步的见解。
+% Finally, we include additional qualitative ablation results to demonstrate the effect of each part of our architecture.
+最后，我们补充了更多的定性消融实验结果，以展示我们架构中各个部分的效果。
 
-\paragraph{Impact of Varied Asynchronous Steps.} To investigate the impact of delayed steps on model performance, we conduct experiments with varied time steps. Specifically, in our implementation, we adopt $T=50$ at inference for efficiency. Thus, we choose $K=0, 5, 15, 25, 35$, which are broadly distributed, to conduct the experiment. For the sake of comparison, we do not incorporate LLMs and manually fix the random seed for all settings. Table~\ref{table:ablate_time_steps} illustrates the impact of delayed time steps. We observe that overall performance improves as we increase the delayed time steps, but the improvement becomes marginal beyond $K=15$. This is likely because $K=15$ is sufficient for basic feature formation.
+% \paragraph{Impact of Varied Asynchronous Steps.} To investigate the impact of delayed steps on model performance, we conduct experiments with varied time steps.
+\paragraph{不同异步步长的影响。} 为了研究延迟步长对模型性能的影响，我们使用了不同的时间步长进行实验。
+% Specifically, in our implementation, we adopt $T=50$ at inference for efficiency. Thus, we choose $K=0, 5, 15, 25, 35$, which are broadly distributed, to conduct the experiment.
+具体来说，在我们的实现中，为了提高效率，我们在推理阶段采用 $T=50$。因此，我们选取了分布广泛的 $K=0, 5, 15, 25, 35$ 来进行实验。
+% For the sake of comparison, we do not incorporate LLMs and manually fix the random seed for all settings. Table~\ref{table:ablate_time_steps} illustrates the impact of delayed time steps.
+为了便于比较，我们未引入 LLM，并且在所有设定中手动固定了随机种子。表~\ref{table:ablate_time_steps} 展示了延迟时间步长的影响。
+% We observe that overall performance improves as we increase the delayed time steps, but the improvement becomes marginal beyond $K=15$. This is likely because $K=15$ is sufficient for basic feature formation.
+我们观察到，随着延迟时间步长的增加，整体性能有所提升，但当 $K$ 超过 $15$ 时，提升变得微乎其微。这很可能是因为 $K=15$ 已经足以完成基础特征的形成。
 
 
 \begin{table*}[h]
 \setlength{\tabcolsep}{28pt}
 \begin{center}
-\caption{\textbf{The impact of different delayed time steps on model performance.}}
+% \caption{\textbf{The impact of different delayed time steps on model performance.}}
+\caption{\textbf{不同延迟时间步长对模型性能的影响。}}
 \label{table:ablate_time_steps}
 \begin{tabular}{lcccccccc}
 \toprule
@@ -120,14 +157,22 @@ Delay Steps & 0 & 5 &  15 & 25 &
 
 
 
-To further demonstrate the effect of the asynchronous strategy, we present the intermediate manipulation process in Fig.\ref{fig:async_demo}. We compare the synchronous strategy (set $K=0$ in the second row) with the asynchronous strategy (set $K=15$ in the third row). The individual intends to "Make it a unicorn" to manipulate brain activity. In the synchronous scenario, the model fails to capture the pertinent structure, i.e., the horse, for effective instruction (as indicated by the color of the horse within the red box). Without allowing basic feature formation in advance, the instruction model encounters difficulty in identifying the relevant structure. For additional visual results, readers can refer to Fig.\ref{fig:async_all_supp}.
+% To further demonstrate the effect of the asynchronous strategy, we present the intermediate manipulation process in Fig.\ref{fig:async_demo}. We compare the synchronous strategy (set $K=0$ in the second row) with the asynchronous strategy (set $K=15$ in the third row).
+为了进一步证明异步策略的效果，我们在图~\ref{fig:async_demo} 中展示了中间操纵过程。我们将同步策略（在第二行中设置 $K=0$）与异步策略（在第三行中设置 $K=15$）进行了比较。
+% The individual intends to "Make it a unicorn" to manipulate brain activity.
+个体意图通过“把它变成独角兽（Make it a unicorn）”来操纵大脑活动。
+% In the synchronous scenario, the model fails to capture the pertinent structure, i.e., the horse, for effective instruction (as indicated by the color of the horse within the red box).
+在同步场景中，模型未能捕捉到相关结构（即马）以执行有效指令（如红框内马的颜色所示）。
+% Without allowing basic feature formation in advance, the instruction model encounters difficulty in identifying the relevant structure. For additional visual results, readers can refer to Fig.\ref{fig:async_all_supp}.
+如果不提前允许基础特征的形成，指令模型在识别相关结构时会遇到困难。更多视觉结果，读者可参考图~\ref{fig:async_all_supp}。
 
 
 
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\linewidth]{figs/async_demo.pdf}
-  \caption{The first row displays the intermediate reconstruction results, while the second and third rows showcase the instruction performance using synchronous and asynchronous paradigms, respectively. The orange progress bar indicates the reconstruction timeline, while the green progress bar represents the instruction timeline.}
+%   \caption{The first row displays the intermediate reconstruction results, while the second and third rows showcase the instruction performance using synchronous and asynchronous paradigms, respectively. The orange progress bar indicates the reconstruction timeline, while the green progress bar represents the instruction timeline.}
+  \caption{第一行显示了中间重建结果，第二行和第三行分别展示了使用同步和异步范式的指令性能。橙色进度条表示重建时间线，绿色进度条表示指令时间线。}
   \label{fig:async_demo}
 \end{figure*}
 
@@ -135,30 +180,59 @@ To further demonstrate the effect of the asynchronous strategy, we present the i
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/more_ablations.pdf}
-  \caption{Without feature injection from adaptor, the model struggles on balancing content preservation and instruction conformation. Removing asynchronous strategy brings difficulty on instruction conformation. Through the incorporation of LLMs guided region, our framework is able to precisely operate on relevant spatial locations.}
+%   \caption{Without feature injection from adaptor, the model struggles on balancing content preservation and instruction conformation. Removing asynchronous strategy brings difficulty on instruction conformation. Through the incorporation of LLMs guided region, our framework is able to precisely operate on relevant spatial locations.}
+  \caption{如果没有来自适配器的特征注入，模型在平衡内容保留与遵循指令方面会面临困难。移除异步策略会给遵循指令带来难度。通过引入 LLM 引导的区域，我们的框架能够精确地在相关的空间位置上进行操作。}
   \label{fig:more_ablation}
 \end{figure*}
 
 
-\paragraph{Impact of Injection Strategy.} The feature injection module acts as a connector, linking the instruction flow to the generation flow, ensuring seamless progressive bridging and effective instruction delivery. For the architecture design of our injection module, we explored both convolution-based structures~\cite{zhang2023adding} and transformer-based structures~\cite{hu2023animate}. Experiments demonstrate that the transformer-based architecture does not improve performance. We speculate this is because the convolution operation's advantage in maintaining spatial layout facilitates learning. Regarding the injection strategy, we empirically found that injection through ResBlock outperforms other blocks. Additionally, leveraging more advanced fusion techniques, such as transformers, does not enhance our performance.
+% \paragraph{Impact of Injection Strategy.} The feature injection module acts as a connector, linking the instruction flow to the generation flow, ensuring seamless progressive bridging and effective instruction delivery.
+\paragraph{注入策略的影响。} 特征注入模块充当连接器，将指令流与生成流联系起来，确保无缝的渐进式桥接与有效的指令传递。
+% For the architecture design of our injection module, we explored both convolution-based structures~\cite{zhang2023adding} and transformer-based structures~\cite{hu2023animate}. Experiments demonstrate that the transformer-based architecture does not improve performance.
+关于注入模块的架构设计，我们探索了基于卷积的结构~\cite{zhang2023adding}和基于 Transformer 的结构~\cite{hu2023animate}。实验表明，基于 Transformer 的架构并未带来性能提升。
+% We speculate this is because the convolution operation's advantage in maintaining spatial layout facilitates learning.
+我们推测，这可能是因为卷积操作在保持空间布局方面的优势有助于学习。
+% Regarding the injection strategy, we empirically found that injection through ResBlock outperforms other blocks. Additionally, leveraging more advanced fusion techniques, such as transformers, does not enhance our performance.
+在注入策略方面，我们根据经验发现，通过 ResBlock 注入优于通过其他模块注入。此外，利用更高级的融合技术（如 Transformer）也无法进一步提升性能。
 
-\paragraph{More Qualitative Results.} We demonstrate additional visual results of our ablation study in Fig.~\ref{fig:more_ablation}. Eliminating the asynchronous strategy makes it difficult for the instruction flow to comprehend the aligned visual content, leading to inferior performance (see the bed and robot). Without the feature injection from the adaptor, the instruction flow lacks sufficient visual information to identify instruction-relevant regions (see the mis-edited curtain and bird). Without LLMs, the model struggles to perform precise operations within the intended spatial regions (see the bed and the bird). The full model effectively balances identity preservation and instruction conformation, achieving visually pleasing results.
+% \paragraph{More Qualitative Results.} We demonstrate additional visual results of our ablation study in Fig.~\ref{fig:more_ablation}.
+\paragraph{更多定性结果。} 我们在图~\ref{fig:more_ablation} 中展示了消融实验的更多视觉结果。
+% Eliminating the asynchronous strategy makes it difficult for the instruction flow to comprehend the aligned visual content, leading to inferior performance (see the bed and robot).
+消除异步策略使得指令流难以理解对齐的视觉内容，从而导致性能下降（见床和机器人的示例）。
+% Without the feature injection from the adaptor, the instruction flow lacks sufficient visual information to identify instruction-relevant regions (see the mis-edited curtain and bird).
+如果没有来自适配器的特征注入，指令流缺乏充足的视觉信息来识别与指令相关的区域（见被错误编辑的窗帘和鸟的示例）。
+% Without LLMs, the model struggles to perform precise operations within the intended spatial regions (see the bed and the bird).
+如果没有 LLM，模型难以在预期的空间区域内执行精确操作（见床和鸟的示例）。
+% The full model effectively balances identity preservation and instruction conformation, achieving visually pleasing results.
+完整模型有效地在保持身份特征与遵循指令之间取得了平衡，实现了视觉上令人愉悦的结果。
 
-\section{More fMRI Instruction Results}
-In this section, we present additional visual instruction results. Although our approach is designed for language-guided instruction, it can readily extend to visual instruction with minimal effort.
+% \section{More fMRI Instruction Results}
+\section{更多 fMRI 指令结果}
+% In this section, we present additional visual instruction results. Although our approach is designed for language-guided instruction, it can readily extend to visual instruction with minimal effort.
+在本节中，我们将展示更多视觉指令操作的结果。尽管我们的方法是针对语言引导的指令而设计的，但只需极少量的修改，它就能轻松扩展以支持视觉指令。
 
-\paragraph{Natural Language Instruction.}
-We demonstrate more instruction results in Fig.~\ref{fig:supp_edit0} and Fig.~\ref{fig:supp_edit1}.
-It can be seen that our approach is able to effectively interface with brain activity conforming to human instructions.
+% \paragraph{Natural Language Instruction.}
+\paragraph{自然语言指令。}
+% We demonstrate more instruction results in Fig.~\ref{fig:supp_edit0} and Fig.~\ref{fig:supp_edit1}.
+我们在图~\ref{fig:supp_edit0} 和图~\ref{fig:supp_edit1} 中展示了更多指令结果。
+% It can be seen that our approach is able to effectively interface with brain activity conforming to human instructions.
+可以看出，我们的方法能够根据人类指令有效地与大脑活动建立接口。
 
-\paragraph{Style Manipulation.}
-For style manipulation, we first invert the style reference image to a word embedding ${[V]}$ in the text latent space, following the common inversion strategy~\cite{ruiz2023dreambooth,mokady2023null}. We then use \emph{In the style of} $[V]$ as our new instruction. The results of this instruction are depicted in Fig.~\ref{fig:supp_style}. It can be seen that our approach effectively captures the style of the reference image and applies it to the target.
+% \paragraph{Style Manipulation.}
+\paragraph{风格操纵。}
+% For style manipulation, we first invert the style reference image to a word embedding ${[V]}$ in the text latent space, following the common inversion strategy~\cite{ruiz2023dreambooth,mokady2023null}.
+对于风格操纵，我们遵循常用的反演策略~\cite{ruiz2023dreambooth,mokady2023null}，首先将风格参考图像反演为文本潜在空间中的词嵌入 ${[V]}$。
+% We then use \emph{In the style of} $[V]$ as our new instruction.
+然后，我们使用“\emph{以 $[V]$ 风格（In the style of $[V]$）}”作为我们的新指令。
+% The results of this instruction are depicted in Fig.~\ref{fig:supp_style}. It can be seen that our approach effectively captures the style of the reference image and applies it to the target.
+该指令的结果描绘在图~\ref{fig:supp_style} 中。可以看出，我们的方法有效地捕捉了参考图像的风格并将其应用于目标。
 
 
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/async_all_supp.pdf}
-  \caption{The first row displays the intermediate reconstruction results, while the second and third rows showcase the instruction performance using synchronous and asynchronous paradigms, respectively. The orange progress bar indicates the reconstruction timeline, while the green progress bar represents the instruction timeline.}
+%   \caption{The first row displays the intermediate reconstruction results, while the second and third rows showcase the instruction performance using synchronous and asynchronous paradigms, respectively. The orange progress bar indicates the reconstruction timeline, while the green progress bar represents the instruction timeline.}
+  \caption{第一行显示了中间重建结果，第二行和第三行分别展示了使用同步和异步范式的指令性能。橙色进度条表示重建时间线，绿色进度条表示指令时间线。}
   \label{fig:async_all_supp}
 \end{figure*}
 
@@ -167,14 +241,16 @@ For style manipulation, we first invert the style reference image to a word embe
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/supp_edit0.pdf}
-  \caption{\textbf{fMRI signal instruction with natural language description.} The first column displays the brain's visual stimulus. The second column illustrates the individual's intended operation. The third column presents the instruction results, while the fourth column shows the intermediate reconstruction results generated by our model.}
+%   \caption{\textbf{fMRI signal instruction with natural language description.} The first column displays the brain's visual stimulus. The second column illustrates the individual's intended operation. The third column presents the instruction results, while the fourth column shows the intermediate reconstruction results generated by our model.}
+  \caption{\textbf{基于自然语言描述的 fMRI 信号指令操作。} 第一列显示大脑的视觉刺激。第二列说明个体的预期操作。第三列呈现指令操作的结果，第四列展示由我们模型生成的中间重建结果。}
   \label{fig:supp_edit0}
 \end{figure*}
 
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/supp_edit1.pdf}
-  \caption{\textbf{fMRI signal instruction with natural language description.} The first column displays the brain's visual stimulus. The second column illustrates the individual's intended operation. The third column presents the instruction results, while the fourth column shows the intermediate reconstruction results generated by our model.}
+%   \caption{\textbf{fMRI signal instruction with natural language description.} The first column displays the brain's visual stimulus. The second column illustrates the individual's intended operation. The third column presents the instruction results, while the fourth column shows the intermediate reconstruction results generated by our model.}
+  \caption{\textbf{基于自然语言描述的 fMRI 信号指令操作。} 第一列显示大脑的视觉刺激。第二列说明个体的预期操作。第三列呈现指令操作的结果，第四列展示由我们模型生成的中间重建结果。}
   \label{fig:supp_edit1}
 \end{figure*}
 
@@ -182,10 +258,7 @@ For style manipulation, we first invert the style reference image to a word embe
 \begin{figure*}[ht!]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/style_supp.pdf}
-  \caption{\textbf{Demonstration Results of Multi-Modal Instruction.} First row list the visual stimulus while second row depict our intermediate reconstructions. The manipulation results via \emph{In the [V] style} are shown within red boxes of the last row.}
+%   \caption{\textbf{Demonstration Results of Multi-Modal Instruction.} First row list the visual stimulus while second row depict our intermediate reconstructions. The manipulation results via \emph{In the [V] style} are shown within red boxes of the last row.}
+  \caption{\textbf{多模态指令演示结果。} 第一行展示了视觉刺激，第二行描绘了我们的中间重建结果。基于“\emph{以 [V] 风格（In the [V] style）}”的操纵结果显示在最后一行的红框内。}
   \label{fig:supp_style}
 \end{figure*}
-
-
-
-

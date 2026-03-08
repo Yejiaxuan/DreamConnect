@@ -1,83 +1,119 @@
-\section{Methodology}
+% \section{Methodology}
+\section{方法论}
 
 \begin{figure*}[t!]
   \centering
    \includegraphics[width=\linewidth]{figs/arch5.pdf}
-  \caption{\textbf{Illustration of the proposed \textbf{\model{}} framework.}
-    A person's biological signal indicated by fMRI sequences $X$, will be activated within his brain according to his ``dreams'' represented by the visual stimuli $Y$.
-    Our system targets to interface with $X$ via a natural language instruction $I$.
-    Specifically, the fMRI signal is regressed to CLIP text and visual embedding, $f_{\text{CLIP}}^{text}$ and $f_{\text{CLIP}}^{vis}$, which are leveraged to aligned with visual content $z^r_t$ in \emph{\textbf{VersNet}}~\cite{xu2023versatile}. After modulated by an adaptor, its intermediate spatial features are fed to \emph{\textbf{InstNet}}~\cite{geng2023instructdiffusion}. Encoded by CLIP text encoder, the human instruction $I$ is injected to \emph{\textbf{InstNet}} to modulate these features toward intended direction.
+%   \caption{\textbf{Illustration of the proposed \textbf{\model{}} framework.}
+%     A person's biological signal indicated by fMRI sequences $X$, will be activated within his brain according to his ``dreams'' represented by the visual stimuli $Y$.
+%     Our system targets to interface with $X$ via a natural language instruction $I$.
+%     Specifically, the fMRI signal is regressed to CLIP text and visual embedding, $f_{\text{CLIP}}^{text}$ and $f_{\text{CLIP}}^{vis}$, which are leveraged to aligned with visual content $z^r_t$ in \emph{\textbf{VersNet}}~\cite{xu2023versatile}. After modulated by an adaptor, its intermediate spatial features are fed to \emph{\textbf{InstNet}}~\cite{geng2023instructdiffusion}. Encoded by CLIP text encoder, the human instruction $I$ is injected to \emph{\textbf{InstNet}} to modulate these features toward intended direction.
+%   }
+  \caption{\textbf{提出的 \textbf{\model{}} 框架图解。}
+    个体根据其由视觉刺激 $Y$ 所代表的“梦境”，其大脑内会激活以 fMRI 序列 $X$ 表示的生物信号。
+    我们的系统旨在通过自然语言指令 $I$ 与 $X$ 建立接口。
+    具体而言，fMRI 信号被回归到 CLIP 文本和视觉嵌入（$f_{\text{CLIP}}^{text}$ 和 $f_{\text{CLIP}}^{vis}$），这些嵌入用于在 \emph{\textbf{VersNet}}~\cite{xu2023versatile} 中与视觉内容 $z^r_t$ 对齐。在经过适配器调制后，其中间空间特征被送入 \emph{\textbf{InstNet}}~\cite{geng2023instructdiffusion}。由 CLIP 文本编码器编码后的人类指令 $I$ 被注入到 \emph{\textbf{InstNet}} 中，以将这些特征向预期方向进行调制。
   }
   \label{fig:arch}
 \end{figure*}
 
+% In this section, we discuss the details of the proposed \emph{Visual Brainstorming Instruction System}, termed \textbf{\model{}}. The primary objective of this framework is to develop a model capable of providing instruction in brain activity. To achieve this, the model must possess the ability to associate human instructions with fMRI signal and modify its embedded pertinent visual information. The overall pipeline is depicted in Fig.~\ref{fig:arch} where we devise an asynchronous dual-stream diffusion architecture coupled with an adaptor to promote \emph{progressive interpretation and instruction}. To facilitate faithful instruction within pertinent regions from both temporal and spatial perspectives, we introduce an asynchronous diffusion strategy and an LLM-guided region-aware manipulation operation.
+在本节中，我们将详细讨论所提出的\emph{视觉头脑风暴指令系统}（命名为 \textbf{\model{}}）。该框架的主要目标是开发一个能够对大脑活动提供指令的模型。为实现这一目标，模型必须具备将人类指令与 fMRI 信号相关联，并修改其内部嵌入的相关视觉信息的能力。整体流水线如图~\ref{fig:arch} 所示，我们设计了一个异步双流扩散架构，并结合一个适配器来促进\emph{渐进式解释与指令}。为了从时间和空间双重视角在相关区域内促进高保真度的指令操作，我们引入了一种异步扩散策略以及一项由大语言模型（LLM）引导的区域感知操纵操作。
 
+% \subsection{Dual Stream Diffusion Instruction}
+\subsection{双流扩散指令}
+% \textbf{Problem Formulation.} Given a visual stimuli $Y \in \mathcal{R}^{3 \times H \times W}$, a person's biological signal revealed by fMRI, $X \in \mathcal{R}^{N_f}$, will be activated, where ${N_f}$ represents the number of relevant voxels. The traditional image reconstruction task targets to recover its indicted visual content $Y^{Rec}$ from $X$. In contrast, we study directly manipulating the entailed information to $Y^{Edit}$ following a piece of natural language instruction $I$.
+\textbf{问题表述。} 给定一个视觉刺激 $Y \in \mathcal{R}^{3 \times H \times W}$，由 fMRI 揭示的个体生物信号 $X \in \mathcal{R}^{N_f}$ 将被激活，其中 ${N_f}$ 表示相关体素的数量。传统的图像重建任务旨在从 $X$ 中恢复其所指示的视觉内容 $Y^{Rec}$。相比之下，我们研究的是根据一条自然语言指令 $I$，直接将其所蕴含的信息操纵为 $Y^{Edit}$。
+% Accomplishing this objective requires a comprehensive cross-modal association between the fMRI signal and the specified instruction. To resolve this issue, we leverage the rich contextual prior within StableDiffusion (SD) to bridge the modality gap due to its effective exploitation in numerous visual tasks. The key is to derive a unified diffusion framework to tackle feature alignment and interaction among distinct modalities progressively.
+完成这一目标需要 fMRI 信号与指定指令之间建立全面的跨模态关联。为了解决这个问题，鉴于稳定扩散（Stable Diffusion, SD）模型在众多视觉任务中的有效应用，我们利用其内部丰富的上下文先验来弥合模态鸿沟。关键在于推导出一个统一的扩散框架，以渐进地处理不同模态之间的特征对齐与交互。
 
-In this section, we discuss the details of the proposed \emph{Visual Brainstorming Instruction System}, termed \textbf{\model{}}. The primary objective of this framework is to develop a model capable of providing instruction in brain activity. To achieve this, the model must possess the ability to associate human instructions with fMRI signal and modify its embedded pertinent visual information. The overall pipeline is depicted in Fig.~\ref{fig:arch} where we devise an asynchronous dual-stream diffusion architecture coupled with an adaptor to promote \emph{progressive interpretation and instruction}. To facilitate faithful instruction within pertinent regions from both temporal and spatial perspectives, we introduce an asynchronous diffusion strategy and an LLM-guided region-aware manipulation operation.
-
-\subsection{Dual Stream Diffusion Instruction}
-\textbf{Problem Formulation.} Given a visual stimuli $Y \in \mathcal{R}^{3 \times H \times W}$, a person's biological signal revealed by fMRI, $X \in \mathcal{R}^{N_f}$, will be activated, where ${N_f}$ represents the number of relevant voxels. The traditional image reconstruction task targets to recover its indicted visual content $Y^{Rec}$ from $X$. In contrast, we study directly manipulating the entailed information to $Y^{Edit}$ following a piece of natural language instruction $I$.
-Accomplishing this objective requires a comprehensive cross-modal association between the fMRI signal and the specified instruction. To resolve this issue, we leverage the rich contextual prior within StableDiffusion (SD) to bridge the modality gap due to its effective exploitation in numerous visual tasks. The key is to derive a unified diffusion framework to tackle feature alignment and interaction among distinct modalities progressively.
-
-\paragraph{Preliminary on Diffusion Models.}
-Diffusion models~\cite{ho2020denoising} stand out due to its stable training objective and exceptional ability to generate high-quality images. It operates by iteratively denoising Gaussian noise to produce the image $\bm{x}_0$.
-Typically, the diffusion model assumes a Markov process~\cite{rabiner1989tutorial} wherein Gaussian noises are gradually added to a clean image $\bm{x}_0$ based on the following equation:
+% \paragraph{Preliminary on Diffusion Models.}
+\paragraph{扩散模型预备知识。}
+% Diffusion models~\cite{ho2020denoising} stand out due to its stable training objective and exceptional ability to generate high-quality images. It operates by iteratively denoising Gaussian noise to produce the image $\bm{x}_0$.
+扩散模型~\cite{ho2020denoising} 凭借其稳定的训练目标和卓越的高质量图像生成能力脱颖而出。它通过对高斯噪声进行迭代去噪来生成图像 $\bm{x}_0$。
+% Typically, the diffusion model assumes a Markov process~\cite{rabiner1989tutorial} wherein Gaussian noises are gradually added to a clean image $\bm{x}_0$ based on the following equation:
+通常，扩散模型假设一个马尔可夫过程~\cite{rabiner1989tutorial}，在该过程中，根据以下等式将高斯噪声逐渐添加至一张干净的图像 $\bm{x}_0$ 中：
 \begin{equation}
     \bm{x}_t = \sqrt{\alpha_t} {\bm{x}}_{0} + \sqrt{1-\alpha_t} \bm{\epsilon} ,
 \label{eq:forward}
 \end{equation}
-where $\bm{\epsilon}\!\sim\!\mathcal{N}(0, \mathbf{I})$ represents the additive Gaussian noise, $t$ denotes the time step and $\alpha_t$ is scalar functions of $t$.
-Our objective is to devise
-a neural network $\bm{\epsilon}_\theta(\bm{x}_t, t, c)$ to predict the added noise $\bm{\epsilon}$.
-Empirically, a simple mean-squared error is leveraged as the loss function:
+% where $\bm{\epsilon}\!\sim\!\mathcal{N}(0, \mathbf{I})$ represents the additive Gaussian noise, $t$ denotes the time step and $\alpha_t$ is scalar functions of $t$.
+其中 $\bm{\epsilon}\!\sim\!\mathcal{N}(0, \mathbf{I})$ 表示附加的高斯噪声，$t$ 表示时间步长，$\alpha_t$ 是关于 $t$ 的标量函数。
+% Our objective is to devise a neural network $\bm{\epsilon}_\theta(\bm{x}_t, t, c)$ to predict the added noise $\bm{\epsilon}$.
+我们的目标是设计一个神经网络 $\bm{\epsilon}_\theta(\bm{x}_t, t, c)$ 来预测所添加的噪声 $\bm{\epsilon}$。
+% Empirically, a simple mean-squared error is leveraged as the loss function:
+根据经验，通常采用简单的均方误差作为损失函数：
 \begin{equation}
     L_{simple} := \mathbb{E}_{\bm{\epsilon} \sim \mathcal{N}(0, \mathbf{I}), \bm{x}_0, c}\Big[ \Vert \bm{\epsilon} - \bm{\epsilon}_\theta(\bm{x}_{t}, c) \Vert_{2}^{2}\Big] \, ,
     \label{eq:LDM_loss}
 \end{equation}
-where $\theta$ represents the learnable parameters of our diffusion model, and $c$ denotes the conditional input to the model.
-To improve the computational efficiency, latent diffusion models (LDM)~\cite{rombach2022high} proposes to operate in a lower-dimensional latent space that encodes $\bm{x}_t$ to $\bm{z}_t$ through VAE~\cite{esser2021taming}.
+% where $\theta$ represents the learnable parameters of our diffusion model, and $c$ denotes the conditional input to the model.
+其中 $\theta$ 表示扩散模型的可学习参数，$c$ 表示模型的条件输入。
+% To improve the computational efficiency, latent diffusion models (LDM)~\cite{rombach2022high} proposes to operate in a lower-dimensional latent space that encodes $\bm{x}_t$ to $\bm{z}_t$ through VAE~\cite{esser2021taming}.
+为了提高计算效率，潜在扩散模型（Latent Diffusion Models, LDM）~\cite{rombach2022high}提出在一个低维的潜在空间中运行，通过 VAE~\cite{esser2021taming} 将 $\bm{x}_t$ 编码为 $\bm{z}_t$。
 
-\paragraph{Dual Stream Diffusion Network.} The overall synthesis process is visualized in Fig.~\ref{fig:arch}. Given a sequence of fMRI signal $X \in \mathcal{R}^{N_f}$ and a sentence of instruction $I$ such as \emph{turn the flowers to yellow}, our objective is to translate $X$ to $Y^{Edit}$ according to the provided instruction.
-The $N_f$ denotes the feature length of collected fMRI signal.
-To connect instruction description with fMRI signal, we devise a dual-stream diffusion network for progressive \emph{interpretation and instruction} as shown in the right side of Fig.~\ref{fig:arch}.
-Accepting information from fMRI signal, the bottom stream aims to hallucinate visually appealing and semantically consistent content for faithful interpretation of the brain signal.
-On top of this stream, another stream  aims to manipulate its decoded visual content according to user-specified instructions. Conditioned on brain signal $X$ and instruction $I$, the dual-stream diffusion network denoises the VAE latent codes $\textbf{z}_t^r$ and $\textbf{z}_t^e$ at each time step $t$. Formally,
+% \paragraph{Dual Stream Diffusion Network.} The overall synthesis process is visualized in Fig.~\ref{fig:arch}. Given a sequence of fMRI signal $X \in \mathcal{R}^{N_f}$ and a sentence of instruction $I$ such as \emph{turn the flowers to yellow}, our objective is to translate $X$ to $Y^{Edit}$ according to the provided instruction.
+\paragraph{双流扩散网络。} 整体合成过程可视化于图~\ref{fig:arch}。给定一段 fMRI 信号序列 $X \in \mathcal{R}^{N_f}$ 和一句指令 $I$（例如“\emph{将花朵变成黄色}”），我们的目标是根据提供的指令将 $X$ 转换为 $Y^{Edit}$。
+% The $N_f$ denotes the feature length of collected fMRI signal.
+其中 $N_f$ 表示采集到的 fMRI 信号的特征长度。
+% To connect instruction description with fMRI signal, we devise a dual-stream diffusion network for progressive \emph{interpretation and instruction} as shown in the right side of Fig.~\ref{fig:arch}.
+为了将指令描述与 fMRI 信号联系起来，我们设计了一个用于渐进式\emph{解释与指令}的双流扩散网络，如图~\ref{fig:arch} 右侧所示。
+% Accepting information from fMRI signal, the bottom stream aims to hallucinate visually appealing and semantically consistent content for faithful interpretation of the brain signal.
+底部的流（解释流）接收来自 fMRI 信号的信息，旨在幻化出视觉上吸引人且语义上一致的内容，以对脑信号进行高保真的解释。
+% On top of this stream, another stream  aims to manipulate its decoded visual content according to user-specified instructions. Conditioned on brain signal $X$ and instruction $I$, the dual-stream diffusion network denoises the VAE latent codes $\textbf{z}_t^r$ and $\textbf{z}_t^e$ at each time step $t$. Formally,
+在此流之上，另一个流（指令流）旨在根据用户指定的指令来操纵其解码出的视觉内容。以脑信号 $X$ 和指令 $I$ 为条件，双流扩散网络在每个时间步长 $t$ 对 VAE 潜在编码 $\textbf{z}_t^r$ 和 $\textbf{z}_t^e$ 进行去噪。形式上表示为：
 \begin{equation}
     [\textbf{z}_{(t-1)}^r, \textbf{z}_{(t-1)}^e] = \textbf{\text{DNet}}_{t}([\textbf{z}_t^r, \textbf{z}_t^e]; I, X).
 \end{equation}
 
+% For the purpose of bridging visual content and brain activity signal, we choose VersatileDiffusion (VD)~\cite{xu2023versatile} as the bottom-stream backbone because both image and text condition are taken into consideration following typical fMRI-based reconstruction works~\cite{ozcelik2023brain,scotti2023reconstructing}.
+为了桥接视觉内容与大脑活动信号，我们选择 VersatileDiffusion (VD)~\cite{xu2023versatile} 作为底部流的骨干网络，这是因为遵循典型的基于 fMRI 的重建工作~\cite{ozcelik2023brain,scotti2023reconstructing}，图像和文本条件都必须被考虑在内。
+% Specifically, the UNet of VD adaptively exploit extracted features from CLIP image and text encoder through cross attention.
+具体来说，VD 的 UNet 通过交叉注意力机制，自适应地利用从 CLIP 图像和文本编码器中提取的特征。
+% We leverage their pretrained parameters to initialize the UNet, thereby keeping most generative image prior.
+我们利用其预训练参数来初始化 UNet，从而保留绝大部分生成图像先验。
+% Then the UNet is freezed and we devise a mixed mapping strategy to predict both CLIP text and visual embed, $f_{\text{CLIP}}^{text}$ and $f_{\text{CLIP}}^{vis}$, within a diffusion paradigm.
+随后，该 UNet 被冻结，我们设计了一种混合映射策略，在扩散范式内同时预测 CLIP 文本嵌入和视觉嵌入，即 $f_{\text{CLIP}}^{text}$ 和 $f_{\text{CLIP}}^{vis}$。
+% The mapping network architecture and training strategy adopts align-before-predict paradigm with previous work~\cite{ramesh2022hierarchical,scotti2023reconstructing} but we operates on both visual and text space that co-manipulates VD in a mixed manner.
+映射网络的架构和训练策略采用了先前工作~\cite{ramesh2022hierarchical,scotti2023reconstructing}中的“先对齐后预测（align-before-predict）”范式，但我们在视觉和文本两个空间上同时操作，以混合的方式共同操纵 VD。
 
-For the purpose of bridging visual content and brain activity signal, we choose VersatileDiffusion (VD)~\cite{xu2023versatile} as the bottom-stream backbone because both image and text condition are taken into consideration following typical fMRI-based reconstruction works~\cite{ozcelik2023brain,scotti2023reconstructing}.
-Specifically, the UNet of VD adaptively exploit extracted features from CLIP image and text encoder through cross attention.
-We leverage their pretrained parameters to initialize the UNet, thereby keeping most generative image prior.
-Then the UNet is freezed and we devise a mixed mapping strategy to predict both CLIP text and visual embed, $f_{\text{CLIP}}^{text}$ and $f_{\text{CLIP}}^{vis}$, within a diffusion paradigm.
-The mapping network architecture and training strategy adopts align-before-predict paradigm with previous work~\cite{ramesh2022hierarchical,scotti2023reconstructing} but we operates on both visual and text space that co-manipulates VD in a mixed manner.
-
-With the interpreted visual content, upper stream targets to guide them towards the desired instruction direction. A natural way to address this is to inject the CLIP text embedding of the instruction $I$ via cross attention, which is leveraged to modulate the spatial features within a diffusion UNet backbone. To connect these two streams, an adaptor network is introduced to adjust the intermediate features of interpreted visual content for better instruction. The adjusted features are injected only in the decoder part of the UNet due to its clear layout and semantic feature construction~\cite{zhang2023adding}.
-To maintain high consistency over the generated shape and layout, we propose to modify the features within residual blocks~\cite{tumanyan2023plug}. To further enhance control over the aligned visual content, we also incorporate the obtained VAE latent $\textbf{z}_t^r$ from bottom stream as concatenation of our input. Note that we convert $\textbf{z}_t^r$ at time $t$ to its denoised estimation $\tilde{\textbf{z}}_0^r$ at time step $t=0$ for consistent representation. Formally,
+% With the interpreted visual content, upper stream targets to guide them towards the desired instruction direction. A natural way to address this is to inject the CLIP text embedding of the instruction $I$ via cross attention, which is leveraged to modulate the spatial features within a diffusion UNet backbone. To connect these two streams, an adaptor network is introduced to adjust the intermediate features of interpreted visual content for better instruction. The adjusted features are injected only in the decoder part of the UNet due to its clear layout and semantic feature construction~\cite{zhang2023adding}.
+借助解释出的视觉内容，上部流（指令流）旨在引导它们朝着预期的指令方向发展。解决这一问题的自然方法是，通过交叉注意力注入指令 $I$ 的 CLIP 文本嵌入，从而利用它来调制扩散 UNet 骨干网络内的空间特征。为了连接这两个流，我们引入了一个适配器网络（adaptor network），用于调整解释出视觉内容的中间特征，以实现更好的指令操作。经过调整的特征仅被注入到 UNet 的解码器部分，这是因为该部分具有清晰的布局和语义特征构建~\cite{zhang2023adding}。
+% To maintain high consistency over the generated shape and layout, we propose to modify the features within residual blocks~\cite{tumanyan2023plug}. To further enhance control over the aligned visual content, we also incorporate the obtained VAE latent $\textbf{z}_t^r$ from bottom stream as concatenation of our input. Note that we convert $\textbf{z}_t^r$ at time $t$ to its denoised estimation $\tilde{\textbf{z}}_0^r$ at time step $t=0$ for consistent representation. Formally,
+为了在生成的形状和布局上保持高度一致性，我们提出在残差块~\cite{tumanyan2023plug}内修改特征。为了进一步增强对已对齐视觉内容的控制，我们还将底部流获取的 VAE 潜在编码 $\textbf{z}_t^r$ 拼接到输入中。请注意，为了获得一致的表示，我们将时间步 $t$ 时的 $\textbf{z}_t^r$ 转换为时间步 $t=0$ 时的去噪估计 $\tilde{\textbf{z}}_0^r$。形式上表示为：
 \begin{equation}
     \tilde{\textbf{z}}_0^r = (\textbf{z}_t^r - \sqrt{1-\overline{\alpha}_t} \bm{g}_{\theta} (\textbf{z}_t^r)) / \sqrt{\overline{\alpha}}_t,
 \end{equation}
-where the $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$ increases along with $t$ and $\bm{g}_{\theta}$ indicates the network of bottom stream.
-For this stream, we initialize it with pretrained UNet from InstructDiffusion~\cite{geng2023instructdiffusion}.
+% where the $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$ increases along with $t$ and $\bm{g}_{\theta}$ indicates the network of bottom stream.
+其中 $\overline{\alpha}_t := \prod_{s=1}^t \alpha_s$ 随着 $t$ 递增，$\bm{g}_{\theta}$ 表示底部流的网络。
+% For this stream, we initialize it with pretrained UNet from InstructDiffusion~\cite{geng2023instructdiffusion}.
+对于这个流，我们使用 InstructDiffusion~\cite{geng2023instructdiffusion} 的预训练 UNet 对其进行初始化。
 
-\subsection{Faithful Instruction via Feature Exploitation}
-The core of our framework lies on bridging fMRI signal and language instruction with visual modality. Thus fully utilization of the visual information plays a crucial role in successful instruction. We aim to make most of them from both temporal and spatial perspectives to facilitate faithful instruction.
-\paragraph{Asynchronous Diffusion Strategy.} One issue of above strategy is that the aligned visual feature $\textbf{z}_t^r$ might not well prepared for manipulation at time step $t$. This problem becomes more severe especially at early stages because its semantic feature is not well formed, which brings difficulty for the instruction to identify pertinent areas to be edited. To address this, we propose an asynchronous approach where the instruction stream is enforced to lag behind the first stream for $K$ steps. Such practice will offer the first stream sufficient time to develop overall layout or shape semantics. Therefore, the improved version of diffusion process can be written as
+% \subsection{Faithful Instruction via Feature Exploitation}
+\subsection{基于特征挖掘的高保真指令}
+% The core of our framework lies on bridging fMRI signal and language instruction with visual modality. Thus fully utilization of the visual information plays a crucial role in successful instruction. We aim to make most of them from both temporal and spatial perspectives to facilitate faithful instruction.
+我们框架的核心在于用视觉模态桥接 fMRI 信号与语言指令。因此，充分利用视觉信息在实现成功指令中起着至关重要的作用。我们的目标是从时间和空间双重视角充分利用它们，以促进高保真度的指令操作。
+% \paragraph{Asynchronous Diffusion Strategy.} One issue of above strategy is that the aligned visual feature $\textbf{z}_t^r$ might not well prepared for manipulation at time step $t$. This problem becomes more severe especially at early stages because its semantic feature is not well formed, which brings difficulty for the instruction to identify pertinent areas to be edited. To address this, we propose an asynchronous approach where the instruction stream is enforced to lag behind the first stream for $K$ steps. Such practice will offer the first stream sufficient time to develop overall layout or shape semantics. Therefore, the improved version of diffusion process can be written as
+\paragraph{异步扩散策略。} 上述策略的一个问题是，对齐后的视觉特征 $\textbf{z}_t^r$ 在时间步 $t$ 时可能尚未准备好进行操纵。由于语义特征尚未完全形成，这一问题在早期阶段尤为严重，这给指令识别出需要编辑的相关区域带来了困难。为了解决这一问题，我们提出了一种异步方法，强制指令流滞后于第一个流 $K$ 个时间步。这种做法将为第一个流提供充足的时间来发展整体的布局或形状语义。因此，改进版的扩散过程可以写为：
 \begin{equation}
     [\textbf{z}_{(t\textcolor{red}{-K}-1)}^r, \textbf{z}_{(t-1)}^e] = \textbf{\text{DNet}}_{t}([\textbf{z}_{t\textcolor{red}{-K}}^r, \textbf{z}_t^e]; I, X).
 \end{equation}
-The $K$ represents the number of time steps that the instruction stream lags behind, which we empirically adopt $K=15$ in our experiment.
+% The $K$ represents the number of time steps that the instruction stream lags behind, which we empirically adopt $K=15$ in our experiment.
+其中 $K$ 表示指令流滞后的时间步数，在我们的实验中，我们根据经验采用 $K=15$。
 
-\paragraph{LLM-Guided Region-Aware Instruction.} The asynchronous strategy implicitly provides higher chances for user instructions to operate on the appropriate regions. This inspires us to seek mechanisms to explicitly restrict feature manipulation within desired regions. Given the robust reasoning capabilities of LLMs, we leverage them as agents to aid in specifying the intended editing region. As depicted in lower part of Fig.~\ref{fig:arch}, we provide the instruction information to the language model and inquiry for the locations that requires focusing on.
-With the obtained advice, we employ it as an text prompt to guide the \emph{Grounding DINO} model to identify the pertinent spatial areas $M^I$ of the reconstructed image $Y^{Rec}$. Then the mask $M_I$ is used to restrict cross-attention. For each cross-attention layer, the instruction features are projected into context values $\textbf{v}$ and keys $\textbf{k}$ while visual features are projected into queries $\textbf{q}$. Its output of this block is given by
+% \paragraph{LLM-Guided Region-Aware Instruction.} The asynchronous strategy implicitly provides higher chances for user instructions to operate on the appropriate regions. This inspires us to seek mechanisms to explicitly restrict feature manipulation within desired regions. Given the robust reasoning capabilities of LLMs, we leverage them as agents to aid in specifying the intended editing region. As depicted in lower part of Fig.~\ref{fig:arch}, we provide the instruction information to the language model and inquiry for the locations that requires focusing on.
+\paragraph{大语言模型（LLM）引导的区域感知指令。} 异步策略隐含地提高了用户指令在适当区域上操作的几率。这启发我们寻求一种机制，将特征操纵显式地限制在预期的区域内。鉴于大语言模型强大的推理能力，我们将其作为代理来辅助指定目标编辑区域。如图~\ref{fig:arch} 下半部所示，我们将指令信息提供给语言模型，并询问需要关注的位置。
+% With the obtained advice, we employ it as an text prompt to guide the \emph{Grounding DINO} model to identify the pertinent spatial areas $M^I$ of the reconstructed image $Y^{Rec}$. Then the mask $M_I$ is used to restrict cross-attention. For each cross-attention layer, the instruction features are projected into context values $\textbf{v}$ and keys $\textbf{k}$ while visual features are projected into queries $\textbf{q}$. Its output of this block is given by
+借助获取的建议，我们将其作为文本提示，引导 \emph{Grounding DINO} 模型识别重建图像 $Y^{Rec}$ 中的相关空间区域 $M^I$。接着，使用掩码 $M_I$ 来限制交叉注意力（cross-attention）。对于每个交叉注意力层，指令特征被投影为上下文值 $\textbf{v}$ 和键 $\textbf{k}$，而视觉特征则被投影为查询 $\textbf{q}$。该模块的输出可表示为：
 \begin{equation}
     \hat{\textbf{f}} = \textbf{A} \textbf{v} \text{  where  } \textbf{A} = \text{Softmax}(\textbf{q}\textbf{k}^T).
 \end{equation}
-Intuitively, the attention map $\textbf{A}$ determines distribution ratio of context features.
-Here the instruction irrelevant region is expected to be untouched. A natural way is to mask out those features outside of $M_I$ by replacing them with attention maps activated by null instruction. Formally,
+% Intuitively, the attention map $\textbf{A}$ determines distribution ratio of context features.
+直观地看，注意力图 $\textbf{A}$ 决定了上下文特征的分布比例。
+% Here the instruction irrelevant region is expected to be untouched. A natural way is to mask out those features outside of $M_I$ by replacing them with attention maps activated by null instruction. Formally,
+在此处，指令无关的区域期望保持不变。一种自然的方法是，通过用无指令（null instruction）激活的注意力图替换 $M_I$ 之外的特征来将其掩码掉。形式上表示为：
 \begin{equation}
     \textbf{A}_M = \textbf{A}_I M_I + \textbf{A}_{null} (1-M_I)
 \end{equation}
-where the updated attention map $\textbf{A}_M$ is a masked combination of attention maps activated by instructions and null instructions, $\textbf{A}_I$ and $\textbf{A}_{null}$, respectively. The guiding mask $M_I$ is interpolated to the spatial size of each UNet block.
-
+% where the updated attention map $\textbf{A}_M$ is a masked combination of attention maps activated by instructions and null instructions, $\textbf{A}_I$ and $\textbf{A}_{null}$, respectively. The guiding mask $M_I$ is interpolated to the spatial size of each UNet block.
+其中，更新后的注意力图 $\textbf{A}_M$ 是由指令和无指令激活的注意力图（分别为 $\textbf{A}_I$ 和 $\textbf{A}_{null}$）掩码组合而成。引导掩码 $M_I$ 被插值到每个 UNet 模块的空间大小。
